@@ -1,0 +1,145 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(ALUMNI)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  alumni    Alumni?
+  events    Event[]
+  rsvps     EventRSVP[]
+  donations Donation[]
+  mentorships MentorshipRequest[]
+}
+
+model Alumni {
+  id             Int      @id @default(autoincrement())
+  userId         Int      @unique
+  name           String
+  email          String   @unique
+  phone          String?
+  graduationYear Int
+  degree         String?
+  department     String?
+  currentJob     String?
+  company        String?
+  location       String?
+  linkedin       String?
+  avatar         String?
+  bio            String?
+  skills         String[]
+  interests      String[]
+  isVisible      Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mentorships    MentorshipRequest[] @relation("MentorAlumni")
+}
+
+model Event {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  location    String?
+  date        DateTime
+  endDate     DateTime?
+  capacity    Int?
+  isPublic    Boolean  @default(true)
+  imageUrl    String?
+  createdBy   Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  creator     User      @relation(fields: [createdBy], references: [id])
+  rsvps       EventRSVP[]
+}
+
+model EventRSVP {
+  id       Int      @id @default(autoincrement())
+  eventId  Int
+  userId   Int
+  status   RSVPStatus @default(PENDING)
+  createdAt DateTime @default(now())
+
+  // Relations
+  event    Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+}
+
+model MentorshipRequest {
+  id          Int      @id @default(autoincrement())
+  mentorId    Int
+  menteeId    Int
+  subject     String
+  message     String
+  status      MentorshipStatus @default(PENDING)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  mentor      Alumni   @relation("MentorAlumni", fields: [mentorId], references: [id])
+  mentee      User     @relation(fields: [menteeId], references: [id])
+}
+
+model Donation {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  amount    Float
+  currency  String   @default("USD")
+  purpose   String?
+  status    PaymentStatus @default(PENDING)
+  paymentId String?
+  createdAt DateTime @default(now())
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  ALUMNI
+}
+
+enum RSVPStatus {
+  PENDING
+  CONFIRMED
+  DECLINED
+}
+
+enum MentorshipStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  COMPLETED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
