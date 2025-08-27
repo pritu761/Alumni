@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '../../../generated/prisma';
+import { PrismaClient, Prisma } from '../../../generated/prisma';
 
 const prisma = new PrismaClient();
 
@@ -10,14 +10,14 @@ export async function GET(request: Request) {
     const userId = searchParams.get('userId');
     const status = searchParams.get('status');
 
-    const where: any = {};
+    const where: Prisma.DonationWhereInput = {};
 
     if (userId) {
       where.userId = parseInt(userId);
     }
 
     if (status) {
-      where.status = status;
+      where.status = status as any; // TypeScript workaround for enum type
     }
 
     // Check if there are any donations first

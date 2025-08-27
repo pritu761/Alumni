@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -58,7 +58,7 @@ const donationCauses = [
 
 const suggestedAmounts = [500, 1000, 2500, 5000, 10000, 25000];
 
-export default function DonatePage() {
+function DonateForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
@@ -335,5 +335,13 @@ export default function DonatePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function DonatePage() {
+  return (
+    <Suspense fallback={<div>Loading donation form...</div>}>
+      <DonateForm />
+    </Suspense>
   );
 }
