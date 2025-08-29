@@ -4,11 +4,10 @@ import useSWR from "swr";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { DollarSign, Clock, Heart } from "lucide-react";
-
-const fetcher = (url: string) => fetch(url).then(res => res.json());
+import { authenticatedFetcher } from "@/lib/fetcher";
 
 export default function DonationsList() {
-  const { data: donations, error, isLoading } = useSWR('/api/donations', fetcher);
+  const { data: donations, error, isLoading } = useSWR('/api/donations', authenticatedFetcher);
 
   if (error) return <div className="text-center text-red-600">Error loading donations.</div>;
   if (isLoading) return <div className="text-center">Loading donations...</div>;

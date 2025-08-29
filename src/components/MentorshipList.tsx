@@ -6,11 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen, MessageSquare, User, Clock } from "lucide-react";
 import Link from "next/link";
-
-const fetcher = (url: string) => fetch(url).then(res => res.json());
+import { authenticatedFetcher } from "@/lib/fetcher";
 
 export default function MentorshipList() {
-  const { data: requests, error, isLoading } = useSWR('/api/mentorship', fetcher);
+  const { data: requests, error, isLoading } = useSWR('/api/mentorship', authenticatedFetcher);
 
   if (error) return <div className="text-center text-red-600">Error loading mentorship requests.</div>;
   if (isLoading) return <div className="text-center">Loading mentorship requests...</div>;

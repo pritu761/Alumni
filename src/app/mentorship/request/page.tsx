@@ -8,18 +8,25 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import { useAuth } from "@/lib/auth";
 
 export default function MentorshipRequestPage() {
   const router = useRouter();
+  const { user, isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     mentorId: "",
     message: "",
     area: "",
     goals: "",
-    timeline: "",
-    requestedBy: 1 // This should come from auth context in a real app
+    timeline: ""
   });
+
+  // Redirect if not authenticated
+  if (!isAuthenticated) {
+    router.push('/auth/login?redirect=/mentorship/request');
+    return null;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,14 +35,32 @@ export default function MentorshipRequestPage() {
     try {
       const submitData = {
         ...formData,
-        mentorId: parseInt(formData.mentorId)
+        mentorId: parseInt(formData.mentorId),
+        requestedBy: user?.id // Use authenticated user's ID
       };
+
+      // Get token from cookie
+      const getCookie = (name: string) => {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop()?.split(';').shift();
+        return null;
+      };
+
+      const token = getCookie('auth-token');
+      
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+      };
+
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
 
       const response = await fetch('/api/mentorship', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers,
+        credentials: 'include',
         body: JSON.stringify(submitData),
       });
 

@@ -1,9 +1,14 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Calendar, BookOpen, DollarSign } from "lucide-react";
+import { useAuth } from "@/lib/auth";
 
 export default function Home() {
+  const { user, isAuthenticated } = useAuth();
+
   const features = [
     {
       title: "Alumni Directory",
@@ -45,18 +50,34 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Welcome to Our Alumni Network
+              {isAuthenticated ? `Welcome back, ${user?.name || 'Alumni'}!` : 'Welcome to Our Alumni Network'}
             </h1>
             <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-              Connect, grow, and give back. Join thousands of alumni building lasting relationships and creating opportunities together.
+              {isAuthenticated 
+                ? 'Continue building lasting relationships and exploring new opportunities with your alumni community.'
+                : 'Connect, grow, and give back. Join thousands of alumni building lasting relationships and creating opportunities together.'
+              }
             </p>
             <div className="space-x-4">
-              <Button size="lg" asChild>
-                <Link href="/auth/register">Join Network</Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <Link href="/alumni">Browse Alumni</Link>
-              </Button>
+              {isAuthenticated ? (
+                <>
+                  <Button size="lg" asChild>
+                    <Link href="/events/create">Create Event</Link>
+                  </Button>
+                  <Button size="lg" variant="outline" asChild>
+                    <Link href="/alumni">Browse Alumni</Link>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button size="lg" asChild>
+                    <Link href="/auth/register">Join Network</Link>
+                  </Button>
+                  <Button size="lg" variant="outline" asChild>
+                    <Link href="/alumni">Browse Alumni</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -115,14 +136,23 @@ export default function Home() {
       <section className="py-16 bg-blue-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Ready to Get Started?
+            {isAuthenticated ? 'Explore More Features' : 'Ready to Get Started?'}
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Join our thriving community of alumni and start building meaningful connections today.
+            {isAuthenticated 
+              ? 'Discover all the ways you can engage with your alumni community and make meaningful connections.'
+              : 'Join our thriving community of alumni and start building meaningful connections today.'
+            }
           </p>
-          <Button size="lg" variant="secondary" asChild>
-            <Link href="/auth/register">Create Your Profile</Link>
-          </Button>
+          {isAuthenticated ? (
+            <Button size="lg" variant="secondary" asChild>
+              <Link href="/events">View Events</Link>
+            </Button>
+          ) : (
+            <Button size="lg" variant="secondary" asChild>
+              <Link href="/auth/register">Create Your Profile</Link>
+            </Button>
+          )}
         </div>
       </section>
     </div>

@@ -1,21 +1,36 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '../../../../generated/prisma';
+import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-
-const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
   try {
     const { email, password } = await request.json();
 
     // Find user
-    const user = await prisma.user.findUnique({
-      where: { email },
-      include: {
-        alumni: true
-      }
-    });
+    let user;
+    try {
+      user = await prisma.user.findUnique({
+        where: { email },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          password: true,
+          role: true,
+          graduationYear: true,
+          department: true,
+          currentJobTitle: true,
+          currentCompany: true,
+        }
+      });
+    } catch (dbError) {
+      console.error('Database connection error:', dbError);
+      return NextResponse.json(
+        { error: 'Database connection failed. Please try again later.' },
+        { status: 503 }
+      );
+    }
 
     if (!user) {
       return NextResponse.json(
@@ -36,8 +51,13 @@ export async function POST(request: Request) {
 
     // Generate JWT token
     const token = jwt.sign(
-      { userId: user.id, email: user.email, role: user.role },
-      process.env.JWT_SECRET || 'fallback-secret',
+      { 
+        userId: user.id, 
+        email: user.email, 
+        name: user.name,
+        role: user.role 
+      },
+      process.env.JWT_SECRET || 'Hello World',
       { expiresIn: '7d' }
     );
 

@@ -3,17 +3,19 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Menu, X, User, Calendar, Users, DollarSign, MessageSquare, BookOpen } from "lucide-react";
+import { Menu, X, User, Calendar, Users, DollarSign, MessageSquare, BookOpen, LogOut } from "lucide-react";
+import { useAuth } from "@/lib/auth";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, isAuthenticated, logout, isLoading } = useAuth();
 
   const navigation = [
     { name: 'Alumni', href: '/alumni', icon: Users },
     { name: 'Events', href: '/events', icon: Calendar },
     { name: 'Mentorship', href: '/mentorship', icon: BookOpen },
     { name: 'Donations', href: '/donations', icon: DollarSign },
-    { name: 'Admin', href: '/admin', icon: User },
+    ...(isAuthenticated && user?.role === 'ADMIN' ? [{ name: 'Admin', href: '/admin', icon: User }] : []),
   ];
 
   return (
@@ -41,9 +43,29 @@ export default function Navbar() {
                 </Link>
               );
             })}
-            <Button asChild>
-              <Link href="/auth/login">Login</Link>
-            </Button>
+            
+            {!isLoading && (
+              <>
+                {isAuthenticated ? (
+                  <div className="flex items-center space-x-4">
+                    <span className="text-sm text-gray-600">Welcome, {user?.name}</span>
+                    <Button variant="outline" onClick={logout} className="flex items-center space-x-1">
+                      <LogOut size={16} />
+                      <span>Logout</span>
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex items-center space-x-2">
+                    <Button variant="outline" asChild>
+                      <Link href="/auth/login">Login</Link>
+                    </Button>
+                    <Button asChild>
+                      <Link href="/auth/register">Sign Up</Link>
+                    </Button>
+                  </div>
+                )}
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -75,9 +97,29 @@ export default function Navbar() {
                   </Link>
                 );
               })}
-              <Button asChild className="w-full">
-                <Link href="/auth/login">Login</Link>
-              </Button>
+              
+              {!isLoading && (
+                <>
+                  {isAuthenticated ? (
+                    <div className="pt-4 space-y-2">
+                      <div className="px-3 py-2 text-sm text-gray-600">Welcome, {user?.name}</div>
+                      <Button variant="outline" onClick={logout} className="w-full flex items-center justify-center space-x-1">
+                        <LogOut size={16} />
+                        <span>Logout</span>
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="pt-4 space-y-2">
+                      <Button variant="outline" asChild className="w-full">
+                        <Link href="/auth/login">Login</Link>
+                      </Button>
+                      <Button asChild className="w-full">
+                        <Link href="/auth/register">Sign Up</Link>
+                      </Button>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           </div>
         )}
