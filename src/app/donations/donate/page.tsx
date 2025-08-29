@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Heart, GraduationCap, Building, Users, Trophy, BookOpen } from "lucide-react";
+import { useAuth } from "@/lib/auth";
 
 const donationCauses = [
   {
@@ -61,6 +61,7 @@ const suggestedAmounts = [500, 1000, 2500, 5000, 10000, 25000];
 function DonateForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { user, isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCause, setSelectedCause] = useState("");
   const [customAmount, setCustomAmount] = useState("");
@@ -70,9 +71,14 @@ function DonateForm() {
     email: "",
     phone: "",
     isAnonymous: false,
-    message: "",
-    donatedBy: 1 // This should come from auth context in a real app
+    message: ""
   });
+
+  // Redirect if not authenticated
+  if (!isAuthenticated) {
+    router.push('/auth/login?redirect=/donations/donate');
+    return null;
+  }
 
   useEffect(() => {
     const cause = searchParams.get('cause');
@@ -97,14 +103,32 @@ function DonateForm() {
         ...formData,
         amount,
         cause: selectedCause,
-        isAnonymous: formData.isAnonymous
+        isAnonymous: formData.isAnonymous,
+        donatedBy: user?.id // Use authenticated user's ID
       };
+
+      // Get token from cookie
+      const getCookie = (name: string) => {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop()?.split(';').shift();
+        return null;
+      };
+
+      const token = getCookie('auth-token');
+      
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+      };
+
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
 
       const response = await fetch('/api/donations', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers,
+        credentials: 'include',
         body: JSON.stringify(submitData),
       });
 

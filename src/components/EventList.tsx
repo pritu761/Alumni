@@ -8,15 +8,14 @@ import { useState } from "react";
 import { Calendar, Clock, MapPin, Users, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
-
-const fetcher = (url: string) => fetch(url).then(res => res.json());
+import { publicFetcher } from "@/lib/fetcher";
 
 export default function EventList() {
   const [filter, setFilter] = useState<'all' | 'upcoming'>('upcoming');
   
   const { data: events, error, isLoading, mutate } = useSWR(
     `/api/events?upcoming=${filter === 'upcoming'}`, 
-    fetcher
+    publicFetcher
   );
 
   const handleRSVP = async (eventId: number, status: 'CONFIRMED' | 'DECLINED') => {
@@ -29,11 +28,28 @@ export default function EventList() {
         return;
       }
 
+      // Get token from cookie
+      const getCookie = (name: string) => {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop()?.split(';').shift();
+        return null;
+      };
+
+      const token = getCookie('auth-token');
+      
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+      };
+
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const response = await fetch('/api/events/rsvp', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers,
+        credentials: 'include',
         body: JSON.stringify({
           eventId,
           userId: user.id,

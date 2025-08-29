@@ -1,25 +1,55 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import { useAuth } from "@/lib/auth";
 
 export default function RegisterPage() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    graduationYear: "",
+    department: "",
+    currentJobTitle: "",
+    currentCompany: "",
+  });
   const [isLoading, setIsLoading] = useState(false);
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/');
+    }
+  }, [isAuthenticated, router]);
+
+  const handleChange = (name: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (password !== confirmPassword) {
+    if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match");
+      return;
+    }
+
+    if (formData.password.length < 8) {
+      toast.error("Password must be at least 8 characters long");
       return;
     }
 
@@ -31,14 +61,22 @@ export default function RegisterPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          graduationYear: formData.graduationYear ? parseInt(formData.graduationYear) : undefined,
+          department: formData.department || undefined,
+          currentJobTitle: formData.currentJobTitle || undefined,
+          currentCompany: formData.currentCompany || undefined,
+        }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         toast.success("Registration successful! Please log in.");
-        window.location.href = '/auth/login';
+        router.push('/auth/login');
       } else {
         toast.error(data.error || "Registration failed");
       }
@@ -51,7 +89,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-lg">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Join Our Network</CardTitle>
           <CardDescription>
@@ -66,8 +104,8 @@ export default function RegisterPage() {
                 id="name"
                 type="text"
                 placeholder="John Doe"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={formData.name}
+                onChange={(e) => handleChange('name', e.target.value)}
                 required
               />
             </div>
@@ -77,8 +115,8 @@ export default function RegisterPage() {
                 id="email"
                 type="email"
                 placeholder="your@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={formData.email}
+                onChange={(e) => handleChange('email', e.target.value)}
                 required
               />
             </div>
@@ -87,8 +125,9 @@ export default function RegisterPage() {
               <Input
                 id="password"
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Minimum 8 characters"
+                value={formData.password}
+                onChange={(e) => handleChange('password', e.target.value)}
                 required
               />
             </div>
@@ -97,9 +136,57 @@ export default function RegisterPage() {
               <Input
                 id="confirmPassword"
                 type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                value={formData.confirmPassword}
+                onChange={(e) => handleChange('confirmPassword', e.target.value)}
                 required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="graduationYear">Graduation Year (Optional)</Label>
+              <Input
+                id="graduationYear"
+                type="number"
+                placeholder="2020"
+                value={formData.graduationYear}
+                onChange={(e) => handleChange('graduationYear', e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="department">Department (Optional)</Label>
+              <Select onValueChange={(value) => handleChange('department', value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select your department" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Computer Science">Computer Science</SelectItem>
+                  <SelectItem value="Information Technology">Information Technology</SelectItem>
+                  <SelectItem value="Electronics">Electronics</SelectItem>
+                  <SelectItem value="Mechanical">Mechanical</SelectItem>
+                  <SelectItem value="Civil">Civil</SelectItem>
+                  <SelectItem value="Electrical">Electrical</SelectItem>
+                  <SelectItem value="Business">Business</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="currentJobTitle">Current Job Title (Optional)</Label>
+              <Input
+                id="currentJobTitle"
+                type="text"
+                placeholder="Software Engineer"
+                value={formData.currentJobTitle}
+                onChange={(e) => handleChange('currentJobTitle', e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="currentCompany">Current Company (Optional)</Label>
+              <Input
+                id="currentCompany"
+                type="text"
+                placeholder="Company Name"
+                value={formData.currentCompany}
+                onChange={(e) => handleChange('currentCompany', e.target.value)}
               />
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>

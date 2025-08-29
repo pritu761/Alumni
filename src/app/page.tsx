@@ -1,9 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Calendar, BookOpen, DollarSign } from "lucide-react";
+import { useAuth } from "@/lib/auth";
 
 export default function Home() {
+  const { isAuthenticated, isLoading } = useAuth();
   const features = [
     {
       title: "Alumni Directory",
@@ -50,14 +54,29 @@ export default function Home() {
             <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
               Connect, grow, and give back. Join thousands of alumni building lasting relationships and creating opportunities together.
             </p>
-            <div className="space-x-4">
-              <Button size="lg" asChild>
-                <Link href="/auth/register">Join Network</Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <Link href="/alumni">Browse Alumni</Link>
-              </Button>
-            </div>
+            {!isLoading && (
+              <div className="space-x-4">
+                {isAuthenticated ? (
+                  <>
+                    <Button size="lg" asChild>
+                      <Link href="/alumni">Browse Alumni</Link>
+                    </Button>
+                    <Button size="lg" variant="outline" asChild>
+                      <Link href="/events">View Events</Link>
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button size="lg" asChild>
+                      <Link href="/auth/register">Join Network</Link>
+                    </Button>
+                    <Button size="lg" variant="outline" asChild>
+                      <Link href="/alumni">Browse Alumni</Link>
+                    </Button>
+                  </>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </section>

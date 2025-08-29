@@ -2,19 +2,19 @@
 
 import { useState } from "react";
 import useSWR from "swr";
+import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Users, Calendar, BookOpen, DollarSign, TrendingUp, Mail, Phone } from "lucide-react";
-
-const fetcher = (url: string) => fetch(url).then(res => res.json());
+import { publicFetcher, authenticatedFetcher } from "@/lib/fetcher";
 
 export default function AdminDashboard() {
-  const { data: alumniData } = useSWR('/api/alumni?limit=100', fetcher);
-  const { data: eventsData } = useSWR('/api/events', fetcher);
-  const { data: mentorshipData } = useSWR('/api/mentorship', fetcher);
-  const { data: donationsData } = useSWR('/api/donations', fetcher);
+  const { data: alumniData } = useSWR('/api/alumni?limit=100', publicFetcher);
+  const { data: eventsData } = useSWR('/api/events', publicFetcher);
+  const { data: mentorshipData } = useSWR('/api/mentorship', authenticatedFetcher);
+  const { data: donationsData } = useSWR('/api/donations', authenticatedFetcher);
 
   const stats = [
     {
@@ -111,7 +111,9 @@ export default function AdminDashboard() {
         <TabsContent value="events" className="space-y-4">
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-semibold">Event Management</h3>
-            <Button>Create Event</Button>
+            <Button asChild>
+              <Link href="/events/create">Create Event</Link>
+            </Button>
           </div>
           <div className="grid gap-4">
             {eventsData?.slice(0, 5).map((event: any) => (
