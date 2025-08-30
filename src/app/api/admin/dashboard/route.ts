@@ -28,7 +28,7 @@ export async function GET(request: Request) {
     }
 
     // Fetch dashboard statistics
-    const [totalUsers, totalEvents, totalDonations, totalMentorships] = await Promise.all([
+    const [totalUsers, totalEvents, totalDonations] = await Promise.all([
       prisma.user.count(),
       prisma.event.count(),
       prisma.donation.aggregate({
@@ -36,7 +36,6 @@ export async function GET(request: Request) {
           amount: true,
         },
       }),
-      prisma.mentorship.count(),
     ]);
 
     // Fetch recent activity (simplified for now)
@@ -83,10 +82,8 @@ export async function GET(request: Request) {
       totalUsers,
       totalEvents,
       totalDonations: totalDonations._sum.amount || 0,
-      totalMentorships,
       recentActivity,
     };
-
     return NextResponse.json(stats);
   } catch (error) {
     console.error("Dashboard stats error:", error);

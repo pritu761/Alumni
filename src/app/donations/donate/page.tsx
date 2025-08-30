@@ -61,7 +61,7 @@ const suggestedAmounts = [500, 1000, 2500, 5000, 10000, 25000];
 function DonateForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCause, setSelectedCause] = useState("");
   const [customAmount, setCustomAmount] = useState("");
@@ -74,18 +74,30 @@ function DonateForm() {
     message: ""
   });
 
-  // Redirect if not authenticated
-  if (!isAuthenticated) {
-    router.push('/auth/login?redirect=/donations/donate');
-    return null;
-  }
-
   useEffect(() => {
     const cause = searchParams.get('cause');
     if (cause) {
       setSelectedCause(cause);
     }
   }, [searchParams]);
+
+  // Show loading while authentication state is being determined
+  if (authLoading) {
+    return (
+      <div className="container mx-auto py-8 px-4">
+        <div className="max-w-2xl mx-auto text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-2 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Redirect if not authenticated after loading is complete
+  if (!authLoading && !isAuthenticated) {
+    router.push('/auth/login?redirect=/donations/donate');
+    return null;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

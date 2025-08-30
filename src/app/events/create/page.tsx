@@ -11,7 +11,7 @@ import { useAuth } from "@/lib/auth";
 
 export default function CreateEventPage() {
   const router = useRouter();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
@@ -24,8 +24,20 @@ export default function CreateEventPage() {
     imageUrl: ""
   });
 
-  // Redirect if not authenticated
-  if (!isAuthenticated) {
+  // Show loading while authentication state is being determined
+  if (authLoading) {
+    return (
+      <div className="container mx-auto py-8 px-4">
+        <div className="max-w-2xl mx-auto text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-2 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Redirect if not authenticated after loading is complete
+  if (!authLoading && !isAuthenticated) {
     router.push('/auth/login?redirect=/events/create');
     return null;
   }

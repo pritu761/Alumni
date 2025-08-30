@@ -36,14 +36,10 @@ export async function GET(request: Request) {
       where,
       include: {
         mentor: {
-          include: {
-            user: {
-              select: {
-                id: true,
-                name: true,
-                email: true
-              }
-            }
+          select: {
+            id: true,
+            name: true,
+            email: true
           }
         },
         mentee: {
@@ -80,14 +76,10 @@ export async function POST(request: Request) {
       },
       include: {
         mentor: {
-          include: {
-            user: {
-              select: {
-                id: true,
-                name: true,
-                email: true
-              }
-            }
+          select: {
+            id: true,
+            name: true,
+            email: true
           }
         },
         mentee: {
