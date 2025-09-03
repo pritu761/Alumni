@@ -4,7 +4,7 @@ import EventList from "@/components/EventList";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Plus, Calendar } from "lucide-react";
-import { useAuth } from "@/lib/auth";
+import { useAuth } from "@/lib/auth-context";
 
 export default function EventsPage() {
   const { user, isAuthenticated } = useAuth();
