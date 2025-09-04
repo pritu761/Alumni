@@ -4,7 +4,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Menu, X, User, Calendar, Users, DollarSign, MessageSquare, BookOpen, LogOut } from "lucide-react";
-import { useAuth } from "@/lib/auth";
+import { useAuth } from "@/lib/auth-context";
+import Image from "next/image";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +24,14 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link href="/" className="flex-shrink-0">
+            <Link href="/" className="flex-shrink-0 flex items-center space-x-3">
+              <Image 
+                src="/icons/icon-96x96.png" 
+                alt="Alumni Network Logo" 
+                width={40} 
+                height={40}
+                className="rounded-lg"
+              />
               <h1 className="text-xl font-bold text-gray-900">Alumni Platform</h1>
             </Link>
           </div>

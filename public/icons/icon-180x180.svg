@@ -1,0 +1,6 @@
+<svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+  <rect width="180" height="180" rx="36" fill="#3b82f6"/>
+  <circle cx="90" cy="63" r="27" fill="white"/>
+  <path d="M 45 117 Q 90 144 135 117" stroke="white" stroke-width="5" fill="none"/>
+  <text x="90" y="162" font-family="Arial, sans-serif" font-size="18" fill="white" text-anchor="middle">ALUMNI</text>
+</svg>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SVG to PNG Converter</title>
+</head>
+<body>
+    <canvas id="canvas" width="144" height="144" style="border: 1px solid #ccc;"></canvas>
+    <br>
+    <button onclick="convertSVGToPNG()">Convert SVG to PNG</button>
+    <br>
+    <a id="downloadLink" style="display:none;">Download PNG</a>
+
+    <script>
+        function convertSVGToPNG() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, 144, 144);
+            
+            // Draw blue background with rounded corners
+            ctx.fillStyle = '#3b82f6';
+            ctx.beginPath();
+            ctx.roundRect(0, 0, 144, 144, 28.8);
+            ctx.fill();
+            
+            // Draw person icon (circle for head)
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(72, 50.4, 21.6, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Draw body (arc for shoulders)
+            ctx.beginPath();
+            ctx.arc(72, 115.2, 43.2, Math.PI, 0, true);
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = 'white';
+            ctx.stroke();
+            
+            // Draw text
+            ctx.fillStyle = 'white';
+            ctx.font = '14.4px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('ALUMNI', 72, 129.6);
+            
+            // Convert to blob and create download link
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const link = document.getElementById('downloadLink');
+                link.href = url;
+                link.download = 'icon-144x144.png';
+                link.style.display = 'block';
+                link.textContent = 'Download icon-144x144.png';
+                link.click();
+            });
+        }
+        
+        // Auto-convert on page load
+        window.onload = convertSVGToPNG;
+    </script>
+</body>
+</html>
