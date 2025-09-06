@@ -120,3 +120,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+.epunda-slab {
+  font-family: "Epunda Slab", serif;
+  font-optical-sizing: auto;
+  font-weight: 400; /* Default weight, can be adjusted */
+  font-style: normal;
+}
+
+.epunda-slab {
+  font-family: "Epunda Slab", serif;
+  font-optical-sizing: auto;
+  font-weight: 400; /* Default weight, can be adjusted */
+  font-style: normal;
+}

@@ -1,0 +1,33 @@
+.horizontal-scroll-container {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  width: 100%;
+}
+
+.horizontal-scroll-content {
+  display: flex; /* Use flexbox for better control over children */
+  animation: scroll-left 40s linear infinite; /* Adjusted duration for smoother, slower scroll */
+  /* No padding-right here, spacing handled by child margins */
+}
+
+.horizontal-scroll-content > * {
+  flex-shrink: 0; /* Prevent items from shrinking */
+  margin-right: 24px; /* Consistent space between individual testimonial cards (approx. 1.5rem) */
+  vertical-align: top; /* Align items at the top */
+  white-space: normal; /* Allow content inside cards to wrap */
+  width: 300px; /* Fixed width for testimonial cards */
+  height: auto; /* Allow height to adjust based on content */
+  display: flex; /* Use flexbox to align content within the card */
+  flex-direction: column; /* Stack content vertically */
+  justify-content: space-between; /* Distribute space between items */
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%); /* Scroll half of the content width for seamless loop with duplicated content */
+  }
+}

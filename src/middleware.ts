@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 // JWT verification using Web Crypto API (Edge Runtime compatible)
-async function verifyJWT(token: string, secret: string): Promise<any> {
+async function verifyJWT(token: string, secret: string): Promise<Record<string, any>> {
   try {
     // Split the JWT token
     const [headerB64, payloadB64, signatureB64] = token.split('.');
