@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Calendar, BookOpen, DollarSign, ArrowRight, Star, Trophy, Heart, Globe } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
+import WaveAnimation from "@/components/WaveAnimation";
+import HorizontalScroll from "@/components/HorizontalScroll";
 
 export default function Home() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -75,7 +77,7 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-600 via-purple-700 to-indigo-800 text-white overflow-hidden">
+      <section className="relative bg-gradient-to-br from-green-500 via-teal-600 to-blue-900 text-white overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="absolute inset-0 opacity-40" style={{
@@ -122,7 +124,7 @@ export default function Home() {
                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                       </Link>
                     </Button>
-                    <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 font-semibold px-8 py-4 rounded-full border-2 transition-all duration-300" asChild>
+                    <Button size="lg" variant="outline" className="border-white text-blue-500 hover:bg-white hover:text-blue-600 font-semibold px-8 py-4 rounded-full border-2 transition-all duration-300" asChild>
                       <Link href="/events">View Events</Link>
                     </Button>
                   </>
@@ -160,17 +162,14 @@ export default function Home() {
 
         {/* Animated Wave */}
         <div className="absolute bottom-0 left-0 right-0">
-          <svg className="w-full h-12 text-white" viewBox="0 0 1200 120" preserveAspectRatio="none">
-            <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="currentColor"></path>
-            <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="currentColor"></path>
-            <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="currentColor"></path>
-          </svg>
+          <WaveAnimation />
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-16 lg:py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-16 lg:py-24 bg-gradient-to-br from-purple-50 to-indigo-100 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-30" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23999999' fill-opacity='0.2'%3E%3Cpath d='M0 40L40 0H20L0 20V40zm20 0L40 20V0H0V20L20 40z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` }}></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
               Everything You Need to{" "}
@@ -191,7 +190,7 @@ export default function Home() {
                   <Link href={feature.href}>
                     <div className={`h-2 bg-gradient-to-r ${feature.color}`}></div>
                     <CardHeader className="text-center pb-4">
-                      <div className={`inline-flex p-4 rounded-full bg-gradient-to-r ${feature.color} mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                      <div >
                         <IconComponent className="h-8 w-8 text-white" />
                       </div>
                       <CardTitle className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
@@ -216,8 +215,9 @@ export default function Home() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-16 lg:py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-16 lg:py-24 bg-gradient-to-br from-blue-50 to-green-100 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-30" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23999999' fill-opacity='0.2'%3E%3Cpath d='M0 40L40 0H20L0 20V40zm20 0L40 20V0H0V20L20 40z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` }}></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
               What Alumni Say
@@ -227,9 +227,9 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <HorizontalScroll>
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="hover:shadow-lg transition-all duration-300 border-l-4 border-l-blue-500">
+              <Card key={index} className="hover:shadow-lg transition-all duration-300 border-l-4 border-l-blue-500 min-w-[300px] mx-4">
                 <CardContent className="p-6">
                   <div className="flex items-center mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
@@ -252,7 +252,7 @@ export default function Home() {
                 </CardContent>
               </Card>
             ))}
-          </div>
+          </HorizontalScroll>
         </div>
       </section>
 
@@ -275,13 +275,20 @@ export default function Home() {
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 font-semibold px-8 py-4 rounded-full border-2 transition-all duration-300" asChild>
+              <Button size="lg" variant="outline" className="border-white text-blue-500 hover:text-blue-600 font-semibold px-8 py-4 rounded-full border-2 transition-all duration-300" asChild>
                 <Link href="/alumni">Explore Network</Link>
               </Button>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-800 text-white py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-400">
+          &copy; {new Date().getFullYear()} DEV DREAMERS. All rights reserved.
+        </div>
+      </footer>
     </div>
   );
 }
