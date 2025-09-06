@@ -136,7 +136,7 @@ export default function Home() {
                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                       </Link>
                     </Button>
-                    <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 font-semibold px-8 py-4 rounded-full border-2 transition-all duration-300" asChild>
+                    <Button size="lg" variant="outline" className="border-white text-blue-500 hover:text-blue-600 font-semibold px-8 py-4 rounded-full border-2 transition-all duration-300" asChild>
                       <Link href="/alumni">Browse Alumni</Link>
                     </Button>
                   </>
