@@ -92,7 +92,7 @@ export default function DonationsPage() {
                 </Link>
               </Button>
             ))}
-            <Button variant="outline" asChild className="text-black-500">
+            <Button variant="secondary" asChild>
               <Link href="/donations/donate">Custom Amount</Link>
             </Button>
           </div>
