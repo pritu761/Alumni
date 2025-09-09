@@ -1,7 +1,7 @@
 import DonationsList from "@/components/DonationsList";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Plus, DollarSign, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function DonationsPage() {
@@ -92,7 +92,7 @@ export default function DonationsPage() {
                 </Link>
               </Button>
             ))}
-            <Button variant="outline" asChild classname="text-black-500">
+            <Button variant="outline" asChild className="text-black-500">
               <Link href="/donations/donate">Custom Amount</Link>
             </Button>
           </div>
