@@ -14,6 +14,7 @@ export default function Navbar() {
   const navigation = [
     { name: 'Alumni', href: '/alumni', icon: Users },
     { name: 'Events', href: '/events', icon: Calendar },
+    { name: 'Jobs', href: '/jobs', icon: MessageSquare },
     { name: 'Mentorship', href: '/mentorship', icon: BookOpen },
     { name: 'Donations', href: '/donations', icon: DollarSign },
     ...(isAuthenticated && user?.role === 'ADMIN' ? [{ name: 'Admin', href: '/admin', icon: User }] : []),
@@ -56,6 +57,12 @@ export default function Navbar() {
               <>
                 {isAuthenticated ? (
                   <div className="flex items-center space-x-4">
+                    <Button variant="outline" asChild className="flex items-center space-x-1">
+                      <Link href="/dashboard">
+                        <User size={16} />
+                        <span>Dashboard</span>
+                      </Link>
+                    </Button>
                     <span className="text-sm text-gray-600">Welcome, {user?.name}</span>
                     <Button variant="outline" onClick={logout} className="flex items-center space-x-1">
                       <LogOut size={16} />
@@ -110,6 +117,12 @@ export default function Navbar() {
                 <>
                   {isAuthenticated ? (
                     <div className="pt-4 space-y-2">
+                      <Button variant="outline" asChild className="w-full flex items-center justify-center space-x-1">
+                        <Link href="/dashboard">
+                          <User size={16} />
+                          <span>Dashboard</span>
+                        </Link>
+                      </Button>
                       <div className="px-3 py-2 text-sm text-gray-600">Welcome, {user?.name}</div>
                       <Button variant="outline" onClick={logout} className="w-full flex items-center justify-center space-x-1">
                         <LogOut size={16} />
