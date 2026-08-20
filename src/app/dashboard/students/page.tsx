@@ -53,8 +53,9 @@ export default function StudentsDashboard() {
             </Reveal>
 
             <Stagger className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {stats.map(s => {
+              {stats.map((s, idx) => {
                 const Icon = s.icon;
+                const barWidth = `${40 + idx * 15}%`;
                 return (
                   <StaggerItem key={s.title}>
                     <Card className="rounded-2xl hover:shadow-md transition-shadow overflow-hidden">
@@ -68,7 +69,7 @@ export default function StudentsDashboard() {
                           <span className={`grid place-items-center w-10 h-10 rounded-xl ${s.bg}`}><Icon className="w-5 h-5" /></span>
                         </div>
                         <div className="mt-3 h-1.5 rounded-full bg-zinc-100 overflow-hidden">
-                          <motion.div initial={{ width: 0 }} whileInView={{ width: `${30 + Math.random()*60}%` }} viewport={{ once: true }} transition={{ duration: 1 }} className={`h-full bg-gradient-to-r ${s.color}`} />
+                          <motion.div initial={{ width: 0 }} whileInView={{ width: barWidth }} viewport={{ once: true }} transition={{ duration: 1 }} className={`h-full bg-gradient-to-r ${s.color}`} />
                         </div>
                       </CardContent>
                     </Card>
