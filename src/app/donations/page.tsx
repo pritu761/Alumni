@@ -23,9 +23,19 @@ export default function DonationsPage() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:28px_28px]" />
         {/* confetti dots */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          {[...Array(8)].map((_, i) => (
-            <motion.div key={i} initial={{ y: -20, x: Math.random()*100 + "%", opacity: 0 }} animate={{ y: "120%", opacity: [0,1,0] }} transition={{ duration: 8 + Math.random()*4, repeat: Infinity, delay: i*0.6, ease: "linear" }} className="absolute w-1.5 h-1.5 rounded-full bg-white/40" />
-          ))}
+          {Array.from({ length: 8 }).map((_, i) => {
+            const x = `${(i * 13) % 100}%`;
+            const duration = 8 + (i % 5);
+            return (
+              <motion.div
+                key={i}
+                initial={{ y: -20, x, opacity: 0 }}
+                animate={{ y: "120%", opacity: [0, 1, 0] }}
+                transition={{ duration, repeat: Infinity, delay: i * 0.6, ease: "linear" }}
+                className="absolute w-1.5 h-1.5 rounded-full bg-white/40"
+              />
+            );
+          })}
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
           <Reveal>
