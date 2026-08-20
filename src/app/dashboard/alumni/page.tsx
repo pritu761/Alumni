@@ -19,7 +19,7 @@ export default function AlumniDashboard() {
   const { data: donations } = useSWR('/api/donations', authenticatedFetcher);
 
   const stats = [
-    { title: "Profile views", value: `${Math.floor(Math.random()*100)+50}`, icon: Users, color: "from-blue-500 to-cyan-500", bg: "bg-blue-50 text-blue-600" },
+    { title: "Profile views", value: "0", icon: Users, color: "from-blue-500 to-cyan-500", bg: "bg-blue-50 text-blue-600" },
     { title: "Events attended", value: `${events?.filter((e:any)=>e.rsvps?.some((r:any)=>r.userId===user?.id && r.status==='CONFIRMED')).length || 0}`, icon: Calendar, color: "from-emerald-500 to-teal-500", bg: "bg-emerald-50 text-emerald-600" },
     { title: "Mentorship provided", value: `${mentorship?.filter((m:any)=>m.mentorId===user?.id).length || 0}`, icon: MessageSquare, color: "from-violet-500 to-fuchsia-500", bg: "bg-violet-50 text-violet-600" },
     { title: "Donated", value: `$${donations?.reduce((s:number,d:any)=>s+d.amount,0) || 0}`, icon: Heart, color: "from-pink-500 to-orange-500", bg: "bg-pink-50 text-pink-600" },
