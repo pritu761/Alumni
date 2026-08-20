@@ -87,8 +87,13 @@ export function AnimatedCounter({
 }) {
   const ref = React.useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true });
-  const numeric = parseInt(value.replace(/[^0-9]/g, ""), 10) || 0;
-  const suffix = value.replace(/[0-9,]/g, "");
+
+  const match = value.match(/^([^0-9]*)([0-9,]+)(.*)$/);
+  const prefix = match?.[1] ?? "";
+  const numberPart = match?.[2] ?? "0";
+  const suffix = match?.[3] ?? "";
+  const numeric = parseInt(numberPart.replace(/,/g, ""), 10) || 0;
+
   const count = useMotionValue(0);
   const rounded = useTransform(count, (v) => Math.round(v).toLocaleString());
 
@@ -106,6 +111,7 @@ export function AnimatedCounter({
 
   return (
     <span ref={ref} className={className}>
+      {prefix}
       {display}
       {suffix}
     </span>
