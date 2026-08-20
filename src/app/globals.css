@@ -116,21 +116,159 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    scroll-behavior: smooth;
+    scrollbar-gutter: stable;
+    scroll-padding-top: 5rem;
+  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  ::selection {
+    background: oklch(0.6 0.2 250);
+    color: white;
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+/* ── Custom scrollbar ── */
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: oklch(0.85 0 0);
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.7 0 0);
+}
+.dark *::-webkit-scrollbar-thumb {
+  background: oklch(0.3 0 0);
+}
+.dark *::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.4 0 0);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(0.85 0 0) transparent;
+}
+
+/* ── Future-ready animations ── */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes blob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -30px) scale(1.05); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+@keyframes gradient-xy {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes aurora {
+  0% { transform: translate(-20%, -10%) rotate(0deg) scale(1); opacity: 0.6; }
+  50% { transform: translate(10%, 10%) rotate(180deg) scale(1.05); opacity: 0.8; }
+  100% { transform: translate(-20%, -10%) rotate(360deg) scale(1); opacity: 0.6; }
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes scroll-progress {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+@keyframes tilt {
+  0%, 100% { transform: perspective(1000px) rotateX(0deg) rotateY(0deg); }
+  50% { transform: perspective(1000px) rotateX(1deg) rotateY(1deg); }
+}
+
+/* ── Utility classes ── */
+.glass {
+  background: oklch(1 0 0 / 0.7);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid oklch(1 0 0 / 0.2);
+}
+.dark .glass {
+  background: oklch(0.2 0 0 / 0.6);
+  border-color: oklch(1 0 0 / 0.1);
+}
+.glass-strong {
+  background: oklch(1 0 0 / 0.85);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+}
+.text-gradient {
+  background: linear-gradient(100deg, oklch(0.55 0.2 250), oklch(0.65 0.2 300), oklch(0.7 0.18 30));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, oklch(1 0 0 / 0.4), transparent);
+  transform: translateX(-100%);
+  animation: shimmer 2s infinite;
+}
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+.animate-blob {
+  animation: blob 20s ease-in-out infinite;
+}
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-xy 8s ease infinite;
+}
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg, oklch(0.6 0.2 250), oklch(0.7 0.18 300));
+  transform-origin: left;
+  z-index: 9999;
+  animation: scroll-progress linear;
+  animation-timeline: scroll();
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
 .epunda-slab {
   font-family: "Epunda Slab", serif;
   font-optical-sizing: auto;
-  font-weight: 400; /* Default weight, can be adjusted */
-  font-style: normal;
-}
-
-.epunda-slab {
-  font-family: "Epunda Slab", serif;
-  font-optical-sizing: auto;
-  font-weight: 400; /* Default weight, can be adjusted */
+  font-weight: 400;
   font-style: normal;
 }

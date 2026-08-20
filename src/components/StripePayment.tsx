@@ -52,7 +52,7 @@ const StripePayment: React.FC<StripePaymentProps> = ({ amount }) => {
   const options = {
     clientSecret,
     appearance: {
-      theme: 'flat',
+      theme: 'flat' as const,
     },
   };
 

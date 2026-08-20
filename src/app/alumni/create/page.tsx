@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { User, Briefcase, GraduationCap, MapPin, Heart, Award } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function CreateAlumniPage() {
   const router = useRouter();
@@ -400,13 +401,18 @@ export default function CreateAlumniPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Join Our Alumni Network</h1>
-          <p className="text-xl text-gray-600">Create your profile and connect with fellow alumni</p>
+    <div className="min-h-screen bg-[#FCFCF9]">
+      <div className="relative overflow-hidden border-b bg-white">
+        <motion.div animate={{ x: [0, 6, 0] }} transition={{ duration: 5, repeat: Infinity }} className="absolute -top-8 right-10 h-32 w-32 rounded-full bg-violet-100 blur-2xl hidden sm:block" />
+        <div className="max-w-4xl mx-auto px-4 py-6">
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="text-center">
+            <span className="inline-flex items-center gap-2 rounded-full bg-zinc-900 text-white px-3 py-1 text-xs font-medium"><User className="w-3 h-3" /> Wizard morphs</span>
+            <h1 className="mt-3 text-3xl font-semibold tracking-tight">Join our network</h1>
+            <p className="text-sm text-zinc-600">Steps animate with spring — distinct for alumni creation.</p>
+          </motion.div>
         </div>
+      </div>
+      <div className="max-w-4xl mx-auto py-8 px-4">
 
         {/* Progress Steps */}
         <div className="mb-8">
@@ -433,9 +439,10 @@ export default function CreateAlumniPage() {
           </div>
         </div>
 
-        {/* Form Card */}
-        <Card className="max-w-2xl mx-auto shadow-xl border-0">
-          <CardHeader className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-lg">
+        {/* Form Card — distinct lift */}
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+        <Card className="max-w-2xl mx-auto shadow-xl border-0 rounded-2xl overflow-hidden">
+          <CardHeader className="bg-zinc-900 text-white">
             <div className="text-center">
               <CardTitle className="text-2xl">{steps[currentStep - 1]?.title}</CardTitle>
               <CardDescription className="text-blue-100">
@@ -491,6 +498,7 @@ export default function CreateAlumniPage() {
             </form>
           </CardContent>
         </Card>
+        </motion.div>
 
         {/* Footer */}
         <div className="text-center mt-8 text-gray-500">
