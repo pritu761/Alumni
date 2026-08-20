@@ -253,8 +253,6 @@
   background: linear-gradient(90deg, oklch(0.6 0.2 250), oklch(0.7 0.18 300));
   transform-origin: left;
   z-index: 9999;
-  animation: scroll-progress linear;
-  animation-timeline: scroll();
 }
 
 /* Reduced motion */
