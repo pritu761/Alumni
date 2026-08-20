@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { SerwistProvider } from "@serwist/turbopack/react";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { Toaster } from "@/components/ui/sonner";
@@ -125,16 +126,18 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning={true}
       >
-        <AuthProvider>
-          <OfflineIndicator />
-          <PWAInstallBanner />
-          <Navbar />
-          <main className="min-h-screen bg-gray-50">
-            {children}
-          </main>
-          <Toaster />
-          <PWAUpdateNotification />
-        </AuthProvider>
+        <SerwistProvider swUrl="/serwist/sw.js">
+          <AuthProvider>
+            <OfflineIndicator />
+            <PWAInstallBanner />
+            <Navbar />
+            <main className="min-h-screen bg-gray-50">
+              {children}
+            </main>
+            <Toaster />
+            <PWAUpdateNotification />
+          </AuthProvider>
+        </SerwistProvider>
       </body>
     </html>
   );

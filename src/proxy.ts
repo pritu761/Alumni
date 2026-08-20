@@ -75,7 +75,7 @@ const protectedApiRoutes = [
   '/api/donations'
 ];
 
-export async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const method = request.method;
   

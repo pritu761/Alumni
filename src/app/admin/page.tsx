@@ -10,6 +10,7 @@ import { Users, Calendar, DollarSign, MessageSquare, Shield, Settings, UserCheck
 import Link from "next/link";
 import useSWR from "swr";
 import { authenticatedFetcher } from "@/lib/fetcher";
+import { motion } from "framer-motion";
 
 export default function AdminPage() {
   const { user } = useAuth();
@@ -101,18 +102,26 @@ export default function AdminPage() {
 
   return (
     <RouteGuard requireAuth={true} requireRole="ADMIN">
-      <div className="container mx-auto py-8 px-4">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-2">
-              <Shield className="h-8 w-8 text-blue-600" />
-              Admin Dashboard
-            </h1>
-            <p className="text-gray-600">
-              Manage and oversee the entire alumni platform
-            </p>
+      <div className="min-h-screen bg-[#FCFCF9]">
+        <div className="relative overflow-hidden border-b bg-white">
+          <motion.div animate={{ opacity: [0.3, 0.6, 0.3] }} transition={{ duration: 3, repeat: Infinity }} className="absolute inset-0 bg-gradient-to-r from-blue-50 via-transparent to-violet-50" />
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-semibold tracking-tight flex items-center gap-2">
+                  <span className="grid place-items-center w-9 h-9 rounded-xl bg-zinc-900 text-white"><Shield className="w-5 h-5" /></span>
+                  Admin — pulse alerts
+                </h1>
+                <p className="text-sm text-zinc-600">Alerts pulse, KPI tiles count up.</p>
+              </div>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" asChild className="rounded-full"><Link href="/admin/settings"><Settings className="w-4 h-4 mr-1" /> Settings</Link></Button>
+                <Badge className="rounded-full bg-emerald-600"><span className="w-2 h-2 rounded-full bg-white animate-pulse mr-1 inline-block" /> Online</Badge>
+              </div>
+            </motion.div>
           </div>
+        </div>
+        <div className="container mx-auto py-8 px-4">
           <div className="flex gap-2">
             <Button variant="outline" size="sm" asChild>
               <Link href="/admin/settings">

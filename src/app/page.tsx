@@ -5,50 +5,55 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Calendar, BookOpen, DollarSign, ArrowRight, Star, Trophy, Heart, Globe } from "lucide-react";
+import { Users, Calendar, BookOpen, DollarSign, ArrowRight, Star, Trophy, Heart, Globe, Sparkles, ShieldCheck, Zap } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import WaveAnimation from "@/components/WaveAnimation";
 import HorizontalScroll from "@/components/HorizontalScroll";
+import { Reveal, Stagger, StaggerItem, AnimatedCounter, ScrollProgress, TiltCard } from "@/components/motion";
 
 export default function Home() {
   const { isAuthenticated, isLoading } = useAuth();
-  
+
   const features = [
     {
       title: "Alumni Directory",
       description: "Connect with fellow alumni and discover career opportunities across industries",
       icon: Users,
       href: "/alumni",
-      color: "from-blue-500 to-cyan-500"
+      color: "from-blue-500 to-cyan-500",
+      accent: "bg-blue-50 text-blue-600",
     },
     {
       title: "Events & Reunions",
       description: "Stay updated with upcoming events, reunions, and networking opportunities",
       icon: Calendar,
       href: "/events",
-      color: "from-purple-500 to-pink-500"
+      color: "from-violet-500 to-fuchsia-500",
+      accent: "bg-violet-50 text-violet-600",
     },
     {
       title: "Mentorship Program",
       description: "Find experienced mentors or become one to guide fellow alumni",
       icon: BookOpen,
       href: "/mentorship",
-      color: "from-green-500 to-emerald-500"
+      color: "from-emerald-500 to-teal-500",
+      accent: "bg-emerald-50 text-emerald-600",
     },
     {
       title: "Give Back",
       description: "Support your alma mater through donations and meaningful contributions",
       icon: DollarSign,
       href: "/donations",
-      color: "from-orange-500 to-red-500"
-    }
+      color: "from-orange-500 to-red-500",
+      accent: "bg-orange-50 text-orange-600",
+    },
   ];
 
   const stats = [
     { label: "Alumni Registered", value: "5,000+", icon: Users },
     { label: "Events Hosted", value: "150+", icon: Calendar },
     { label: "Mentorship Connections", value: "800+", icon: Heart },
-    { label: "Donations Raised", value: "$2M+", icon: Trophy }
+    { label: "Donations Raised", value: "$2M+", icon: Trophy },
   ];
 
   const testimonials = [
@@ -57,107 +62,131 @@ export default function Home() {
       role: "Software Engineer at Google",
       year: "Class of 2018",
       content: "The alumni network helped me land my dream job. The mentorship program connected me with industry leaders who guided my career path.",
-      rating: 5
+      rating: 5,
     },
     {
       name: "Michael Rodriguez",
       role: "Startup Founder",
       year: "Class of 2015",
       content: "Through this platform, I found my co-founder and received invaluable advice from experienced entrepreneurs in our network.",
-      rating: 5
+      rating: 5,
     },
     {
       name: "Dr. Emily Johnson",
       role: "Research Scientist",
       year: "Class of 2012",
       content: "The ongoing connections and collaborative opportunities have been instrumental in advancing my research and career.",
-      rating: 5
-    }
+      rating: 5,
+    },
+    {
+      name: "Arjun Patel",
+      role: "Product Manager at Amazon",
+      year: "Class of 2017",
+      content: "The community is genuinely helpful — from referrals to real mentorship. It feels like an extended family.",
+      rating: 5,
+    },
+    {
+      name: "Lisa Wang",
+      role: "UX Lead at Figma",
+      year: "Class of 2016",
+      content: "Beautifully built and actually useful. I’ve both received and given mentorship here.",
+      rating: 5,
+    },
   ];
 
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-green-500 via-teal-600 to-blue-900 text-white overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="absolute inset-0 opacity-40" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-        }}></div>
-        
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-          <div className="text-center">
-            {/* Logo/Icon */}
+    <div className="min-h-screen bg-[#FCFCF9]">
+      <ScrollProgress />
+
+      {/* HERO */}
+      <section className="relative overflow-hidden bg-zinc-950 text-white">
+        {/* aurora blobs */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-32 -left-32 h-[600px] w-[600px] rounded-full bg-violet-600/30 blur-[100px] animate-blob" />
+          <div className="absolute -top-20 right-0 h-[560px] w-[560px] rounded-full bg-blue-600/25 blur-[100px] animate-blob" style={{ animationDelay: "-6s" }} />
+          <div className="absolute bottom-0 left-1/2 h-[700px] w-[900px] -translate-x-1/2 rounded-full bg-teal-500/20 blur-[110px] animate-blob" style={{ animationDelay: "-12s" }} />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:32px_32px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-28 lg:pt-20 lg:pb-36">
+          {/* top badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+            className="mx-auto flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur text-xs font-medium text-white/80"
+          >
+            <span className="grid place-items-center w-5 h-5 rounded-full bg-white text-zinc-900">
+              <Sparkles className="w-3 h-3" />
+            </span>
+            Future-ready alumni experience • Built with Next 16 & Turbopack
+          </motion.div>
+
+          <div className="mt-8 text-center">
             <motion.div
-              initial={{ opacity: 0, y: -50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="mb-8 flex justify-center"
+              initial={{ opacity: 0, y: 16, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.7, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+              className="flex justify-center mb-6"
             >
               <div className="relative">
-                <Image 
-                  src="/icons/icon-192x192.png" 
-                  alt="Alumni Network" 
-                  width={120} 
-                  height={120}
-                  className="rounded-full shadow-2xl border-4 border-white/30 hover:scale-105 transition-transform duration-300"
+                <div className="absolute -inset-3 bg-gradient-to-r from-violet-600 to-blue-600 rounded-full blur-xl opacity-40 animate-pulse" />
+                <Image
+                  src="/icons/icon-192x192.png"
+                  alt="Alumni Network"
+                  width={92}
+                  height={92}
+                  className="relative rounded-[22px] shadow-2xl ring-1 ring-white/20"
                 />
-                <div className="absolute -inset-2 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full blur opacity-75 animate-pulse"></div>
               </div>
             </motion.div>
 
             <motion.h1
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold mb-6 leading-tight tracking-tight"
+              transition={{ duration: 0.7, delay: 0.18, ease: [0.25, 0.1, 0.25, 1] }}
+              className="mx-auto max-w-4xl text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-semibold tracking-[-0.03em] leading-[0.95]"
             >
-              <span className="bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
-                Welcome to Our
-              </span>
+              Welcome to our
               <br />
-              <span className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
-                Alumni Network
-              </span>
+              <span className="bg-gradient-to-r from-white via-violet-200 to-blue-200 bg-clip-text text-transparent">Alumni Network</span>
             </motion.h1>
-            
+
             <motion.p
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-              className="text-xl sm:text-2xl md:text-3xl mb-10 max-w-5xl mx-auto text-blue-100 leading-relaxed font-light"
+              transition={{ duration: 0.6, delay: 0.28 }}
+              className="mx-auto mt-5 max-w-2xl text-[15px] sm:text-base leading-relaxed text-white/70"
             >
-              Connect, grow, and give back. Join <span className="font-semibold text-white">thousands of alumni</span> building lasting relationships and creating opportunities together.
+              Connect, grow, and give back. Join <span className="text-white font-medium">thousands of alumni</span> building lasting relationships and creating opportunities together — with a delightful, fast, and accessible experience.
             </motion.p>
-            
+
             {!isLoading && (
               <motion.div
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-                className="flex flex-col sm:flex-row gap-5 justify-center items-center mb-12"
+                transition={{ duration: 0.6, delay: 0.36 }}
+                className="mt-8 flex flex-col sm:flex-row gap-3 justify-center"
               >
                 {isAuthenticated ? (
                   <>
-                    <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-bold px-10 py-5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group text-lg" asChild>
+                    <Button size="lg" asChild className="rounded-full px-8 h-11 bg-white text-zinc-900 hover:bg-zinc-100 shadow-lg group">
                       <Link href="/alumni" className="flex items-center gap-2">
-                        Browse Alumni
-                        <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                        Browse Alumni <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                       </Link>
                     </Button>
-                    <Button size="lg" variant="outline" className="border-white text-blue-500 hover:bg-white hover:text-blue-600 font-bold px-10 py-5 rounded-full border-2 transition-all duration-300 text-lg" asChild>
+                    <Button size="lg" variant="outline" asChild className="rounded-full px-8 h-11 border-white/20 bg-white/5 text-white hover:bg-white hover:text-zinc-900 backdrop-blur">
                       <Link href="/events">View Events</Link>
                     </Button>
                   </>
                 ) : (
                   <>
-                    <Button size="lg" className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white hover:from-yellow-500 hover:to-orange-600 font-bold px-10 py-5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group text-lg" asChild>
+                    <Button size="lg" asChild className="rounded-full px-8 h-11 bg-white text-zinc-900 hover:bg-zinc-100 shadow-lg group">
                       <Link href="/auth/register" className="flex items-center gap-2">
-                        Join Network
-                        <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                        Join network <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                       </Link>
                     </Button>
-                    <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 font-bold px-10 py-5 rounded-full border-2 transition-all duration-300 text-lg" asChild>
+                    <Button size="lg" variant="outline" asChild className="rounded-full px-8 h-11 border-white/15 bg-white/5 text-white hover:bg-white hover:text-zinc-900">
                       <Link href="/alumni">Browse Alumni</Link>
                     </Button>
                   </>
@@ -165,189 +194,161 @@ export default function Home() {
               </motion.div>
             )}
 
-            {/* Quick Stats */}
-            <div className="mt-16 grid grid-cols-2 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
-              {stats.map((stat, index) => {
-                const IconComponent = stat.icon;
-                return (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.8 + index * 0.1, ease: "easeOut" }}
-                    className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all duration-300 transform hover:scale-105 cursor-pointer"
-                  >
-                    <IconComponent className="w-10 h-10 text-yellow-400 mx-auto mb-3" />
-                    <div className="text-3xl lg:text-4xl font-bold text-white mb-1">{stat.value}</div>
-                    <div className="text-blue-200 text-base lg:text-lg">{stat.label}</div>
-                  </motion.div>
-                );
-              })}
-            </div>
+            {/* trust row */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.6 }}
+              className="mt-8 flex flex-wrap items-center justify-center gap-2 text-xs text-white/60"
+            >
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 border border-white/10 px-3 py-1.5"><ShieldCheck className="w-3.5 h-3.5" /> Verified alumni</span>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 border border-white/10 px-3 py-1.5"><Zap className="w-3.5 h-3.5" /> Instant search</span>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 border border-white/10 px-3 py-1.5"><Globe className="w-3.5 h-3.5" /> PWA-ready</span>
+            </motion.div>
           </div>
-        </div>
 
-        {/* Animated Wave */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <WaveAnimation />
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-16 lg:py-24 bg-gradient-to-br from-purple-50 to-indigo-100 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-30" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23999999' fill-opacity='0.2'%3E%3Cpath d='M0 40L40 0H20L0 20V40zm20 0L40 20V0H0V20L20 40z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` }}></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-center mb-20"
-          >
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-6">
-              Everything You Need to{" "}
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Stay Connected
-              </span>
-            </h2>
-            <p className="text-xl sm:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed font-light">
-              Our platform provides all the tools you need to build meaningful connections and advance your career.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-            {features.map((feature, index) => {
-              const IconComponent = feature.icon;
+          {/* stats */}
+          <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-3 max-w-5xl mx-auto">
+            {stats.map((s, i) => {
+              const Icon = s.icon;
               return (
                 <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
+                  key={s.label}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 + i * 0.06, duration: 0.5 }}
+                  className="rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-xl p-5 hover:bg-white/[0.08] transition-colors"
                 >
-                  <Card className="group relative hover:shadow-2xl transition-all duration-500 cursor-pointer border-0 bg-white hover:-translate-y-3 overflow-hidden rounded-xl">
-                    <Link href={feature.href}>
-                      <div className={`h-3 bg-gradient-to-r ${feature.color} absolute top-0 left-0 right-0`}></div>
-                      <CardHeader className="text-center pt-8 pb-4">
-                        <div className={`inline-flex p-5 rounded-full bg-gradient-to-r ${feature.color} mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                          <IconComponent className="h-9 w-9 text-white" />
-                        </div>
-                        <CardTitle className="text-2xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors">
-                          {feature.title}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="text-center pb-8">
-                        <CardDescription className="text-gray-600 leading-relaxed text-base">
-                          {feature.description}
-                        </CardDescription>
-                        <div className="mt-6 flex items-center justify-center text-blue-600 font-semibold group-hover:gap-3 transition-all text-lg">
-                          Learn More
-                          <ArrowRight className="w-5 h-5 ml-1 group-hover:translate-x-1 transition-transform" />
-                        </div>
-                      </CardContent>
-                    </Link>
-                  </Card>
+                  <Icon className="w-5 h-5 text-white/70 mb-3" />
+                  <div className="text-2xl font-semibold tracking-tight">
+                    <AnimatedCounter value={s.value} />
+                  </div>
+                  <div className="text-xs font-medium tracking-wide text-white/60 uppercase">{s.label}</div>
                 </motion.div>
               );
             })}
           </div>
         </div>
+
+        <div className="absolute bottom-0 left-0 right-0">
+          <WaveAnimation />
+        </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="py-16 lg:py-24 bg-gradient-to-br from-blue-50 to-green-100 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-30" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23999999' fill-opacity='0.2'%3E%3Cpath d='M0 40L40 0H20L0 20V40zm20 0L40 20V0H0V20L20 40z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` }}></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-center mb-20"
-          >
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-6">
-              What Our Alumni Say
+      {/* FEATURES */}
+      <section className="py-14 lg:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Reveal className="text-center max-w-2xl mx-auto">
+            <div className="inline-flex items-center gap-2 rounded-full border bg-white px-3 py-1 text-xs font-medium text-zinc-600 shadow-sm">
+              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" /> Everything you need to stay connected
+            </div>
+            <h2 className="mt-4 text-3xl sm:text-4xl font-semibold tracking-tight text-zinc-900">
+              A platform that <span className="text-gradient">moves with you</span>
             </h2>
-            <p className="text-xl sm:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed font-light">
-              Hear from successful alumni who have benefited from our vibrant network and programs.
+            <p className="mt-3 text-sm sm:text-[15px] leading-relaxed text-zinc-600">
+              Search, connect, and collaborate with delightful micro-interactions, fast navigation, and offline-ready PWA support.
             </p>
-          </motion.div>
+          </Reveal>
 
-          <HorizontalScroll>
-            {testimonials.map((testimonial, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
-              >
-                <Card className="relative hover:shadow-2xl transition-all duration-300 border-l-4 border-l-blue-500 rounded-xl overflow-hidden h-full min-w-[300px] mx-4">
-                  <CardContent className="p-8">
-                    <div className="flex items-center mb-5">
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <Star key={i} className="w-6 h-6 text-yellow-400 fill-current" />
+          <Stagger className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {features.map((f) => {
+              const Icon = f.icon;
+              return (
+                <StaggerItem key={f.title}>
+                  <TiltCard className="h-full">
+                    <Link href={f.href} className="block h-full">
+                      <Card className="h-full group relative overflow-hidden rounded-[20px] border-zinc-200 bg-white hover:shadow-lg hover:shadow-zinc-200/50 transition-all duration-300 hover:-translate-y-1">
+                        <div className={`h-1 w-full bg-gradient-to-r ${f.color}`} />
+                        <CardHeader className="pt-6">
+                          <div className={`inline-flex w-fit rounded-xl p-2.5 ${f.accent} ring-1 ring-black/5 group-hover:scale-105 transition-transform`}>
+                            <Icon className="h-5 w-5" />
+                          </div>
+                          <CardTitle className="text-[15px] font-semibold tracking-tight mt-3">{f.title}</CardTitle>
+                        </CardHeader>
+                        <CardContent className="pt-0">
+                          <CardDescription className="text-sm leading-relaxed text-zinc-600">{f.description}</CardDescription>
+                          <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-zinc-900 group-hover:gap-1.5 transition-all">
+                            Learn more <ArrowRight className="w-4 h-4" />
+                          </span>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  </TiltCard>
+                </StaggerItem>
+              );
+            })}
+          </Stagger>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="py-12 lg:py-16 bg-white border-y">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Reveal className="text-center max-w-2xl mx-auto">
+            <h2 className="text-3xl font-semibold tracking-tight text-zinc-900">What our alumni say</h2>
+            <p className="mt-2 text-sm text-zinc-600">Real stories from a vibrant, supportive community.</p>
+          </Reveal>
+
+          <div className="mt-8">
+            <HorizontalScroll>
+              {testimonials.map((t, idx) => (
+                <Card key={idx} className="min-w-[320px] max-w-[360px] rounded-2xl border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+                  <CardContent className="p-6">
+                    <div className="flex gap-1 mb-3">
+                      {Array.from({ length: t.rating }).map((_, i) => (
+                        <Star key={i} className="w-4 h-4 text-amber-500 fill-amber-500" />
                       ))}
                     </div>
-                    <blockquote className="text-gray-700 mb-7 italic leading-relaxed text-lg">
-                      "{testimonial.content}"
-                    </blockquote>
-                    <div className="flex items-center">
-                      <div className="w-14 h-14 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-xl mr-4 shadow-md">
-                        {testimonial.name.charAt(0)}
+                    <p className="text-sm leading-relaxed text-zinc-700">“{t.content}”</p>
+                    <div className="mt-4 flex items-center gap-3">
+                      <div className="grid place-items-center w-9 h-9 rounded-full bg-zinc-900 text-white text-sm font-semibold">
+                        {t.name.charAt(0)}
                       </div>
                       <div>
-                        <div className="font-bold text-gray-900 text-lg">{testimonial.name}</div>
-                        <div className="text-base text-gray-600">{testimonial.role}</div>
-                        <div className="text-base text-blue-600">{testimonial.year}</div>
+                        <div className="text-sm font-semibold text-zinc-900 leading-none">{t.name}</div>
+                        <div className="text-xs text-zinc-600">{t.role} • {t.year}</div>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
-              </motion.div>
-            ))}
-          </HorizontalScroll>
+              ))}
+            </HorizontalScroll>
+          </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 lg:py-24 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-700 relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/10"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="max-w-3xl mx-auto"
-          >
-            <Globe className="w-20 h-20 text-yellow-400 mx-auto mb-8" />
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-6">
-              Ready to Get Started?
-            </h2>
-            <p className="text-xl sm:text-2xl text-blue-100 mb-10 leading-relaxed font-light">
-              Join our thriving community of alumni and start building meaningful connections today. Your next opportunity is just one connection away.
+      {/* CTA */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-zinc-950" />
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-600/20 via-blue-600/20 to-teal-500/20" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:28px_28px]" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20 text-center">
+          <Reveal>
+            <Globe className="w-8 h-8 text-white/70 mx-auto mb-4" />
+            <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white">Ready to get started?</h2>
+            <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-[15px] leading-relaxed text-white/70">
+              Join our thriving community and start building meaningful connections today. Your next opportunity is one connection away.
             </p>
-            <div className="flex flex-col sm:flex-row gap-5 justify-center">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-bold px-10 py-5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group text-lg" asChild>
+            <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+              <Button size="lg" asChild className="rounded-full bg-white text-zinc-900 hover:bg-zinc-100 px-8 h-11">
                 <Link href="/auth/register" className="flex items-center gap-2">
-                  Create Your Profile
-                  <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                  Create your profile <ArrowRight className="w-4 h-4" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-blue-500 hover:bg-white hover:text-blue-600 font-bold px-10 py-5 rounded-full border-2 transition-all duration-300 text-lg" asChild>
-                <Link href="/alumni">Explore Network</Link>
+              <Button size="lg" variant="outline" asChild className="rounded-full border-white/20 bg-white/5 text-white hover:bg-white hover:text-zinc-900 px-8 h-11">
+                <Link href="/alumni">Explore network</Link>
               </Button>
             </div>
-          </motion.div>
+          </Reveal>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-800 text-white py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-400">
-          &copy; {new Date().getFullYear()} DEV DREAMERS. All rights reserved.
+      <footer className="border-t bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between text-xs text-zinc-500">
+          <span>© {new Date().getFullYear()} DEV DREAMERS. All rights reserved.</span>
+          <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 bg-zinc-50">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> All systems operational
+          </span>
         </div>
       </footer>
     </div>

@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Heart, GraduationCap, Building, Users, Trophy, BookOpen } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
+import { motion, AnimatePresence } from "framer-motion";
 
 const donationCauses = [
   {
@@ -182,14 +183,18 @@ function DonateForm() {
   const currentCause = donationCauses.find(cause => cause.id === selectedCause);
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-4">Make a Donation</h1>
-          <p className="text-gray-600">
-            Support your alma mater and help create opportunities for future generations
-          </p>
+    <div className="min-h-screen bg-[#FCFCF9]">
+      <div className="relative overflow-hidden border-b bg-white">
+        <motion.div animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 1.8, repeat: Infinity }} className="absolute right-12 top-6 w-12 h-12 rounded-full bg-pink-500/10 grid place-items-center hidden sm:flex"><Heart className="w-6 h-6 text-pink-600" /></motion.div>
+        <div className="max-w-4xl mx-auto px-4 py-6">
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="text-center">
+            <h1 className="text-3xl font-semibold tracking-tight">Make a donation — heart beats</h1>
+            <p className="text-sm text-zinc-600">Amounts pop, causes flip on select, confetti on submit.</p>
+          </motion.div>
         </div>
+      </div>
+      <div className="container mx-auto py-8 px-4">
+      <div className="max-w-4xl mx-auto">
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Donation Causes */}
@@ -369,6 +374,7 @@ function DonateForm() {
             </Card>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

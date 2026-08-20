@@ -1,15 +1,33 @@
 import type { NextConfig } from "next";
+import { withSerwist } from "@serwist/turbopack";
 
 const nextConfig: NextConfig = {
-  eslint: {
-    // Ignore ESLint errors during production builds
-    ignoreDuringBuilds: false,
-    dirs: ['src', 'app', 'components', 'lib'],
-  },
   typescript: {
-    // Ignore TypeScript errors during production builds
     ignoreBuildErrors: false,
+  },
+  // Native Node.js modules and the Prisma runtime must stay external
+  serverExternalPackages: ["@prisma/client", "prisma"],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
+  },
+  async headers() {
+    return [
+      {
+        source: "/manifest.json",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400",
+          },
+        ],
+      },
+    ];
   },
 };
 
-export default nextConfig;
+export default withSerwist(nextConfig);

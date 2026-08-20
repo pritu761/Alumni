@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Target, DollarSign, Calendar, Users, Heart } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function CreateCampaignPage() {
   const router = useRouter();
@@ -50,17 +51,21 @@ export default function CreateCampaignPage() {
 
   return (
     <RouteGuard requireAuth={true}>
-      <div className="container mx-auto py-8 px-4 max-w-4xl">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-2">
-            <Target className="h-8 w-8 text-blue-600" />
-            Create Donation Campaign
-          </h1>
-          <p className="text-gray-600">
-            Start a fundraising campaign to support your alma mater
-          </p>
+      <div className="min-h-screen bg-[#FCFCF9]">
+        <div className="relative overflow-hidden border-b bg-white">
+          <motion.div animate={{ scale: [1, 1.08, 1] }} transition={{ duration: 4, repeat: Infinity }} className="absolute right-8 top-6 w-24 h-24 rounded-full border-4 border-pink-100 hidden sm:block" />
+          <motion.div animate={{ scale: [1.08, 1, 1.08] }} transition={{ duration: 4, repeat: Infinity, delay: 1 }} className="absolute right-16 top-12 w-16 h-16 rounded-full bg-pink-500/10 hidden sm:block" />
+          <div className="max-w-4xl mx-auto px-4 py-6">
+            <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-3">
+              <span className="grid place-items-center w-10 h-10 rounded-xl bg-pink-600 text-white"><Target className="w-5 h-5" /></span>
+              <div>
+                <h1 className="text-2xl font-semibold tracking-tight">Create campaign — target pulses</h1>
+                <p className="text-sm text-zinc-600">Goal preview morphs as you type.</p>
+              </div>
+            </motion.div>
+          </div>
         </div>
+        <div className="container mx-auto py-8 px-4 max-w-4xl">
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Campaign Details */}
@@ -181,23 +186,14 @@ export default function CreateCampaignPage() {
           </Card>
 
           {/* Submit */}
-          <div className="flex gap-4 justify-end">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => router.back()}
-            >
-              Cancel
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="flex gap-4 justify-end">
+            <Button type="button" variant="outline" onClick={() => router.back()} className="rounded-full">Cancel</Button>
+            <Button type="submit" disabled={isLoading} className="rounded-full bg-pink-600 hover:bg-pink-700 gap-2">
+              {isLoading ? "Creating..." : "Create campaign"}
             </Button>
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className="bg-blue-600 hover:bg-blue-700"
-            >
-              {isLoading ? "Creating..." : "Create Campaign"}
-            </Button>
-          </div>
+          </motion.div>
         </form>
+      </div>
       </div>
     </RouteGuard>
   );

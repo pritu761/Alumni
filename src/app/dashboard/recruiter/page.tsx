@@ -1,389 +1,120 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { useAuth } from "@/lib/auth-context";
 import RouteGuard from "@/components/RouteGuard";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Users, Calendar, MessageSquare, Building2, Briefcase, Trophy, TrendingUp, Clock, Plus, FileText, UserCheck, DollarSign } from "lucide-react";
+import { Users, Briefcase, TrendingUp, Clock, Plus, FileText, UserCheck } from "lucide-react";
 import Link from "next/link";
 import useSWR from "swr";
 import { authenticatedFetcher } from "@/lib/fetcher";
+import { Reveal, Stagger, StaggerItem, AnimatedCounter } from "@/components/motion";
 
 export default function RecruiterDashboard() {
-  const { user } = useAuth();
   const { data: jobs } = useSWR('/api/jobs', authenticatedFetcher);
-  const { data: candidates } = useSWR('/api/jobs/applications', authenticatedFetcher);
 
-  const dashboardStats = [
-    {
-      title: "Active Job Posts",
-      value: jobs?.filter((j: any) => j.status === 'active').length || 0,
-      icon: Briefcase,
-      color: "text-blue-600",
-      bgColor: "bg-blue-100",
-      trend: "+5"
-    },
-    {
-      title: "Applications Received",
-      value: candidates?.length || 0,
-      icon: FileText,
-      color: "text-green-600",
-      bgColor: "bg-green-100",
-      trend: "+23"
-    },
-    {
-      title: "Talent Pool Access",
-      value: Math.floor(Math.random() * 500) + 200,
-      icon: Users,
-      color: "text-purple-600",
-      bgColor: "bg-purple-100",
-      trend: "+12"
-    },
-    {
-      title: "Successful Hires",
-      value: Math.floor(Math.random() * 15) + 8,
-      icon: UserCheck,
-      color: "text-orange-600",
-      bgColor: "bg-orange-100",
-      trend: "+3"
-    }
+  const stats = [
+    { title: "Active posts", value: "3", icon: Briefcase, color: "from-blue-500 to-cyan-500", bg: "bg-blue-50 text-blue-600" },
+    { title: "Applications", value: "140", icon: FileText, color: "from-emerald-500 to-teal-500", bg: "bg-emerald-50 text-emerald-600" },
+    { title: "Talent pool", value: "642", icon: Users, color: "from-violet-500 to-fuchsia-500", bg: "bg-violet-50 text-violet-600" },
+    { title: "Hires", value: "12", icon: UserCheck, color: "from-orange-500 to-pink-500", bg: "bg-orange-50 text-orange-600" },
   ];
 
-  const quickActions = [
-    {
-      title: "Post New Job",
-      description: "Create and publish a new job opening",
-      icon: Plus,
-      href: "/jobs/create",
-      color: "from-blue-500 to-cyan-500"
-    },
-    {
-      title: "Browse Talent Pool",
-      description: "Search through alumni profiles and resumes",
-      icon: Users,
-      href: "/alumni",
-      color: "from-green-500 to-emerald-500"
-    },
-    {
-      title: "Manage Applications",
-      description: "Review and process job applications",
-      icon: FileText,
-      href: "/jobs/applications",
-      color: "from-purple-500 to-pink-500"
-    },
-    {
-      title: "Host Event",
-      description: "Organize recruitment events and job fairs",
-      icon: Calendar,
-      href: "/events/create",
-      color: "from-orange-500 to-red-500"
-    }
-  ];
-
-  const recentJobs = [
-    {
-      title: "Senior Software Engineer",
-      company: "TechCorp",
-      location: "San Francisco, CA",
-      applicants: 45,
-      status: "active",
-      posted: "3 days ago"
-    },
-    {
-      title: "Product Manager",
-      company: "InnovateCo",
-      location: "New York, NY",
-      applicants: 28,
-      status: "active",
-      posted: "1 week ago"
-    },
-    {
-      title: "Data Scientist",
-      company: "DataTech",
-      location: "Boston, MA",
-      applicants: 67,
-      status: "reviewing",
-      posted: "2 weeks ago"
-    }
-  ];
-
-  const recentActivity = [
-    { type: "application", message: "15 new applications for Software Engineer role", time: "2 hours ago", icon: FileText },
-    { type: "job", message: "Product Manager job post approved and published", time: "5 hours ago", icon: Briefcase },
-    { type: "hire", message: "John Doe accepted offer for Data Analyst position", time: "1 day ago", icon: UserCheck },
-    { type: "talent", message: "3 new alumni joined the platform", time: "2 days ago", icon: Users }
-  ];
-
-  const talentMetrics = [
-    { skill: "Software Engineering", count: 145, growth: "+12%" },
-    { skill: "Data Science", count: 89, growth: "+8%" },
-    { skill: "Product Management", count: 67, growth: "+15%" },
-    { skill: "Marketing", count: 78, growth: "+5%" },
-    { skill: "Finance", count: 92, growth: "+10%" }
+  const pipeline = [
+    { stage: "Sourced", count: 142, color: "bg-zinc-200" },
+    { stage: "Screened", count: 68, color: "bg-blue-500" },
+    { stage: "Interviewed", count: 24, color: "bg-violet-600" },
+    { stage: "Offered", count: 8, color: "bg-emerald-600" },
   ];
 
   return (
     <RouteGuard requireAuth={true}>
-      <div className="container mx-auto py-8 px-4">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Recruiter Dashboard 💼
-            </h1>
-            <p className="text-gray-600 flex items-center gap-2">
-              <Building2 className="h-4 w-4" />
-              Connect with top alumni talent for your open positions
-            </p>
-          </div>
-          <div className="flex gap-2">
-            <Button className="bg-blue-600 hover:bg-blue-700" asChild>
-              <Link href="/jobs/create">
-                <Plus className="h-4 w-4 mr-2" />
-                Post Job
-              </Link>
-            </Button>
-          </div>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {dashboardStats.map((stat, index) => {
-            const IconComponent = stat.icon;
-            return (
-              <Card key={index} className="hover:shadow-lg transition-all duration-300">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                      <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-                      <div className="flex items-center gap-1 mt-1">
-                        <TrendingUp className="h-3 w-3 text-green-500" />
-                        <span className="text-xs text-green-600 font-medium">{stat.trend}</span>
-                      </div>
-                    </div>
-                    <div className={`${stat.bgColor} p-3 rounded-full`}>
-                      <IconComponent className={`h-6 w-6 ${stat.color}`} />
-                    </div>
+      <div className="min-h-screen bg-[#FCFCF9]">
+        <section className="relative overflow-hidden border-b bg-white">
+          <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-white to-orange-50" />
+          <motion.div className="absolute right-0 top-0 h-full w-1/3 opacity-20 hidden lg:block" animate={{ x: [0, 10, 0] }} transition={{ duration: 6, repeat: Infinity }}>
+            <div className="h-full w-full bg-[repeating-linear-gradient(90deg,#000_0_1px,transparent_1px_20px)] [mask-image:linear-gradient(to_left,black,transparent)]" />
+          </motion.div>
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <Reveal>
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <h1 className="text-3xl font-semibold tracking-tight">Recruiter pipeline <span className="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">flows</span></h1>
+                  <p className="text-sm text-zinc-600">Pipeline bars grow left→right on scroll — distinct from student bars.</p>
+                  <div className="mt-3 flex gap-2">
+                    {pipeline.map((p,i) => (
+                      <motion.div key={p.stage} initial={{ width: 0 }} whileInView={{ width: `${18 + i*18}%` }} viewport={{ once: true }} transition={{ delay: i*0.1, duration: 0.6 }} className={`h-1.5 rounded-full ${p.color}`} style={{ minWidth: 40 }} />
+                    ))}
                   </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Quick Actions */}
-          <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Trophy className="h-5 w-5 text-yellow-500" />
-                  Quick Actions
-                </CardTitle>
-                <CardDescription>
-                  Streamline your recruitment process
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {quickActions.map((action, index) => {
-                    const IconComponent = action.icon;
-                    return (
-                      <Card key={index} className="hover:shadow-lg transition-all duration-300 cursor-pointer border-l-4 border-l-transparent hover:border-l-blue-500">
-                        <Link href={action.href}>
-                          <CardContent className="p-4">
-                            <div className="flex items-start gap-3">
-                              <div className={`bg-gradient-to-r ${action.color} p-2 rounded-lg`}>
-                                <IconComponent className="h-5 w-5 text-white" />
-                              </div>
-                              <div className="flex-1">
-                                <h3 className="font-semibold text-gray-900 mb-1">{action.title}</h3>
-                                <p className="text-sm text-gray-600">{action.description}</p>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Link>
-                      </Card>
-                    );
-                  })}
                 </div>
-              </CardContent>
-            </Card>
+                <Button asChild className="rounded-full bg-zinc-900 gap-2"><Link href="/jobs/create"><Plus className="w-4 h-4" /> Post job</Link></Button>
+              </div>
+            </Reveal>
 
-            {/* Recent Job Posts */}
-            <Card className="mt-6">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle className="flex items-center gap-2">
-                      <Briefcase className="h-5 w-5 text-blue-600" />
-                      Your Job Posts
-                    </CardTitle>
-                    <CardDescription>
-                      Track performance of your latest job openings
-                    </CardDescription>
-                  </div>
-                  <Button variant="outline" size="sm" asChild>
-                    <Link href="/jobs">View All</Link>
-                  </Button>
-                </div>
-              </CardHeader>
+            <Stagger className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {stats.map(s => (
+                <StaggerItem key={s.title}>
+                  <Card className="rounded-2xl">
+                    <CardContent className="p-5">
+                      <div className="flex items-start justify-between">
+                        <div><div className="text-xs uppercase tracking-wide text-zinc-500">{s.title}</div><div className="text-2xl font-semibold mt-1"><AnimatedCounter value={s.value} /></div></div>
+                        <span className={`w-10 h-10 rounded-xl grid place-items-center ${s.bg}`}><s.icon className="w-5 h-5" /></span>
+                      </div>
+                      <div className="mt-2 flex items-center gap-1 text-xs text-emerald-600"><TrendingUp className="w-3 h-3" /> +12% this week</div>
+                    </CardContent>
+                  </Card>
+                </StaggerItem>
+              ))}
+            </Stagger>
+          </div>
+        </section>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-6">
+            <Card className="rounded-2xl">
+              <CardHeader><CardTitle className="text-sm">Pipeline overview</CardTitle><CardDescription>Horizontal flow — each stage slides in</CardDescription></CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {recentJobs.map((job, index) => (
-                    <div key={index} className="p-4 border rounded-lg hover:bg-gray-50 transition-colors">
-                      <div className="flex items-start justify-between mb-2">
-                        <div>
-                          <h4 className="font-semibold text-gray-900">{job.title}</h4>
-                          <p className="text-sm text-gray-600">{job.company} • {job.location}</p>
-                        </div>
-                        <Badge 
-                          variant={job.status === 'active' ? 'default' : 'secondary'}
-                          className="capitalize"
-                        >
-                          {job.status}
-                        </Badge>
-                      </div>
-                      <div className="flex items-center justify-between text-sm text-gray-500">
-                        <span className="flex items-center gap-1">
-                          <FileText className="h-4 w-4" />
-                          {job.applicants} applications
-                        </span>
-                        <span>{job.posted}</span>
-                      </div>
-                    </div>
+                <div className="flex gap-2">
+                  {pipeline.map((p,i) => (
+                    <motion.div key={p.stage} initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i*0.08 }} className="flex-1 rounded-xl border bg-white p-3 text-center">
+                      <div className="text-xs text-zinc-500">{p.stage}</div>
+                      <div className="text-xl font-semibold"><AnimatedCounter value={`${p.count}`} /></div>
+                      <div className={`mx-auto mt-1 h-1 w-full rounded-full ${p.color} opacity-60`} />
+                    </motion.div>
                   ))}
                 </div>
+                <div className="mt-4 flex gap-2">
+                  <Button size="sm" className="rounded-full" asChild><Link href="/jobs/create">Post job</Link></Button>
+                  <Button size="sm" variant="outline" className="rounded-full" asChild><Link href="/alumni">Browse talent</Link></Button>
+                </div>
               </CardContent>
             </Card>
 
-            {/* Talent Pool Insights */}
-            <Card className="mt-6">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5 text-purple-600" />
-                  Talent Pool by Skills
-                </CardTitle>
-                <CardDescription>
-                  Available alumni by skill categories
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {talentMetrics.map((skill, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                      <div>
-                        <h4 className="font-medium text-gray-900">{skill.skill}</h4>
-                        <p className="text-sm text-gray-600">{skill.count} alumni available</p>
-                      </div>
-                      <div className="text-right">
-                        <div className="flex items-center gap-1 text-green-600">
-                          <TrendingUp className="h-4 w-4" />
-                          <span className="text-sm font-medium">{skill.growth}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-4">
-                  <Button variant="ghost" className="w-full" asChild>
-                    <Link href="/alumni">Browse All Talent</Link>
-                  </Button>
-                </div>
+            <Card className="rounded-2xl">
+              <CardHeader><CardTitle className="text-sm">Recent posts</CardTitle></CardHeader>
+              <CardContent className="space-y-3">
+                {[
+                  { title: "Senior Software Engineer", meta: "TechCorp • SF", apps: 45, status: "active" },
+                  { title: "Product Manager", meta: "InnovateCo • NY", apps: 28, status: "active" },
+                ].map((j,i) => (
+                  <motion.div key={j.title} initial={{ opacity: 0, x: 12 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i*0.05 }} className="flex items-center justify-between rounded-xl border p-3 hover:bg-zinc-50">
+                    <div><div className="font-medium text-sm">{j.title}</div><div className="text-xs text-zinc-500">{j.meta} • {j.apps} apps</div></div>
+                    <Badge className="rounded-full capitalize">{j.status}</Badge>
+                  </motion.div>
+                ))}
               </CardContent>
             </Card>
           </div>
 
-          {/* Activity & Applications */}
-          <div>
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-blue-500" />
-                  Recent Activity
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {recentActivity.map((activity, index) => {
-                    const IconComponent = activity.icon;
-                    return (
-                      <div key={index} className="flex items-start gap-3">
-                        <div className="bg-gray-100 p-2 rounded-full">
-                          <IconComponent className="h-4 w-4 text-gray-600" />
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-sm font-medium text-gray-900">{activity.message}</p>
-                          <p className="text-xs text-gray-500">{activity.time}</p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Top Performers */}
-            <Card className="mt-6">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Trophy className="h-5 w-5 text-yellow-500" />
-                  Top Candidates
-                </CardTitle>
-                <CardDescription>
-                  Highly qualified alumni profiles
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="p-3 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-medium text-gray-900">Sarah Chen</h4>
-                      <Badge variant="outline">Available</Badge>
-                    </div>
-                    <p className="text-sm text-gray-600 mb-2">Senior Software Engineer</p>
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <span>5+ years exp</span>
-                      <span>•</span>
-                      <span>React, Node.js</span>
-                    </div>
-                  </div>
-
-                  <div className="p-3 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-medium text-gray-900">Michael Rodriguez</h4>
-                      <Badge variant="outline">Open to offers</Badge>
-                    </div>
-                    <p className="text-sm text-gray-600 mb-2">Product Manager</p>
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <span>7+ years exp</span>
-                      <span>•</span>
-                      <span>B2B, SaaS</span>
-                    </div>
-                  </div>
-
-                  <div className="p-3 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-medium text-gray-900">Emily Johnson</h4>
-                      <Badge variant="outline">Actively looking</Badge>
-                    </div>
-                    <p className="text-sm text-gray-600 mb-2">Data Scientist</p>
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <span>4+ years exp</span>
-                      <span>•</span>
-                      <span>ML, Python</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-4">
-                  <Button variant="ghost" className="w-full" asChild>
-                    <Link href="/alumni">View All Profiles</Link>
-                  </Button>
-                </div>
+          <div className="space-y-6">
+            <Card className="rounded-2xl">
+              <CardHeader><CardTitle className="flex items-center gap-2 text-sm"><Clock className="w-4 h-4" /> Recent activity</CardTitle></CardHeader>
+              <CardContent className="space-y-2">
+                {["15 new applications", "Job post approved", "John accepted offer"].map((m,i)=>(
+                  <motion.div key={m} initial={{ opacity: 0 }} whileInView={{ opacity:1 }} viewport={{ once:true }} transition={{ delay:i*0.05 }} className="rounded-xl bg-zinc-50 p-3 text-sm">{m}</motion.div>
+                ))}
               </CardContent>
             </Card>
           </div>

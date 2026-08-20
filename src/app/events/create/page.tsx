@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
+import { motion } from "framer-motion";
+import { Calendar } from "lucide-react";
 
 export default function CreateEventPage() {
   const router = useRouter();
@@ -102,14 +104,23 @@ export default function CreateEventPage() {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="min-h-screen bg-[#FCFCF9]">
+      <div className="relative overflow-hidden border-b bg-white">
+        <motion.div animate={{ rotate: [0, 2, 0] }} transition={{ duration: 6, repeat: Infinity }} className="absolute right-10 top-6 w-20 h-20 rounded-2xl bg-violet-100 hidden sm:grid place-items-center"><Calendar className="w-8 h-8 text-violet-600" /></motion.div>
+        <div className="max-w-2xl mx-auto px-4 py-6">
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+            <h1 className="text-2xl font-semibold tracking-tight">Create event — calendar flips</h1>
+            <p className="text-sm text-zinc-600">Fields stagger in, card lifts on hover.</p>
+          </motion.div>
+        </div>
+      </div>
+      <div className="container mx-auto py-8 px-4">
       <div className="max-w-2xl mx-auto">
-        <Card>
+        <motion.div initial={{ opacity: 0, y: 12, rotateX: -4 }} animate={{ opacity: 1, y: 0, rotateX: 0 }} transition={{ duration: 0.5 }} style={{ perspective: 800 }}>
+        <Card className="rounded-2xl shadow-sm">
           <CardHeader>
-            <CardTitle className="text-2xl">Create New Event</CardTitle>
-            <CardDescription>
-              Organize an alumni event or reunion
-            </CardDescription>
+            <CardTitle className="text-xl tracking-tight">New event</CardTitle>
+            <CardDescription>Organize an alumni event or reunion</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -231,6 +242,8 @@ export default function CreateEventPage() {
             </form>
           </CardContent>
         </Card>
+        </motion.div>
+      </div>
       </div>
     </div>
   );

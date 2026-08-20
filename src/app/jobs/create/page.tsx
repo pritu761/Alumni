@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Briefcase, MapPin, DollarSign, Clock, Users, Building2, Plus, X } from "lucide-react";
 import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
+import { motion } from "framer-motion";
 
 export default function CreateJobPage() {
   const router = useRouter();
@@ -112,17 +113,20 @@ export default function CreateJobPage() {
 
   return (
     <RouteGuard requireAuth={true}>
-      <div className="container mx-auto py-8 px-4 max-w-4xl">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-2">
-            <Briefcase className="h-8 w-8 text-blue-600" />
-            Post a New Job
-          </h1>
-          <p className="text-gray-600">
-            Connect with talented alumni by posting your job opening
-          </p>
+      <div className="min-h-screen bg-[#FCFCF9]">
+        <div className="relative overflow-hidden border-b bg-white">
+          <motion.div animate={{ x: [0, 6, 0] }} transition={{ duration: 5, repeat: Infinity }} className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-blue-100 blur-2xl" />
+          <div className="max-w-4xl mx-auto px-4 py-6">
+            <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-3">
+              <span className="grid place-items-center w-10 h-10 rounded-xl bg-blue-600 text-white"><Briefcase className="w-5 h-5" /></span>
+              <div>
+                <h1 className="text-2xl font-semibold tracking-tight">Post a new job — cards slide in</h1>
+                <p className="text-sm text-zinc-600">Sections stagger, skills pop with spring.</p>
+              </div>
+            </motion.div>
+          </div>
         </div>
+        <div className="container mx-auto py-8 px-4 max-w-4xl">
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Basic Information */}
@@ -453,6 +457,7 @@ export default function CreateJobPage() {
             </Button>
           </div>
         </form>
+      </div>
       </div>
     </RouteGuard>
   );

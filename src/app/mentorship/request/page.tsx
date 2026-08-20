@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +12,7 @@ import { useAuth } from "@/lib/auth-context";
 
 export default function MentorshipRequestPage() {
   const router = useRouter();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     mentorId: "",
@@ -22,11 +22,21 @@ export default function MentorshipRequestPage() {
     timeline: ""
   });
 
-  // Redirect if not authenticated
-  if (!isAuthenticated) {
-    router.push('/auth/login?redirect=/mentorship/request');
-    return null;
+  // Redirect if not authenticated — use effect to avoid SSR issues (Next 16 prerender)
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      router.push('/auth/login?redirect=/mentorship/request');
+    }
+  }, [authLoading, isAuthenticated, router]);
+
+  if (authLoading) {
+    return (
+      <div className="container mx-auto py-16 px-4 flex justify-center">
+        <div className="h-8 w-8 rounded-full border-2 border-blue-600 border-t-transparent animate-spin" />
+      </div>
+    );
   }
+  if (!isAuthenticated) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

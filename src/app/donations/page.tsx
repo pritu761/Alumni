@@ -1,124 +1,119 @@
+"use client";
+
+import { motion } from "framer-motion";
 import DonationsList from "@/components/DonationsList";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Plus, DollarSign, Heart } from "lucide-react";
+import { Plus, DollarSign, Heart, Sparkles, TrendingUp } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Reveal, Stagger, StaggerItem, AnimatedCounter } from "@/components/motion";
 
 export default function DonationsPage() {
   const causes = [
-    {
-      title: "Scholarship Fund",
-      description: "Support deserving students with financial assistance",
-      raised: 45000,
-      goal: 100000
-    },
-    {
-      title: "Infrastructure Development",
-      description: "Help improve campus facilities and technology",
-      raised: 75000,
-      goal: 150000
-    },
-    {
-      title: "Research Programs",
-      description: "Fund cutting-edge research initiatives",
-      raised: 30000,
-      goal: 80000
-    }
+    { title: "Scholarship Fund", description: "Support deserving students", raised: 45000, goal: 100000, color: "from-violet-600 to-blue-600" },
+    { title: "Infrastructure Development", description: "Improve campus facilities", raised: 75000, goal: 150000, color: "from-emerald-600 to-teal-600" },
+    { title: "Research Programs", description: "Fund cutting-edge research", raised: 30000, goal: 80000, color: "from-orange-500 to-pink-600" },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-extrabold text-gray-900 dark:text-white mb-6 leading-tight">
-            Give Back to Your Alma Mater
-          </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
-            Your contributions help us continue providing excellent education and opportunities for future generations.
-            Every donation, big or small, makes a significant impact.
-          </p>
-          <div className="flex justify-center space-x-4">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
-              <Link href="/donations/donate" className="flex items-center">
-                <DollarSign className="h-5 w-5 mr-2" /> Donate Now
-              </Link>
-            </Button>
-            <Button size="lg" variant="outline" className="text-blue-600 border-blue-600 hover:bg-blue-50 dark:text-blue-300 dark:border-blue-300">
-              <Link href="/donations/create" className="flex items-center">
-                <Plus className="h-5 w-5 mr-2" /> Start a Campaign
-              </Link>
-            </Button>
-          </div>
+    <div className="min-h-screen bg-[#FCFCF9]">
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-zinc-950" />
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-600/25 via-transparent to-emerald-600/20" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:28px_28px]" />
+        {/* confetti dots */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          {Array.from({ length: 8 }).map((_, i) => {
+            const x = `${(i * 13) % 100}%`;
+            const duration = 8 + (i % 5);
+            return (
+              <motion.div
+                key={i}
+                initial={{ y: -20, x, opacity: 0 }}
+                animate={{ y: "120%", opacity: [0, 1, 0] }}
+                transition={{ duration, repeat: Infinity, delay: i * 0.6, ease: "linear" }}
+                className="absolute w-1.5 h-1.5 rounded-full bg-white/40"
+              />
+            );
+          })}
         </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
+          <Reveal>
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/10 text-white px-3 py-1 text-xs backdrop-blur"><Heart className="w-3.5 h-3.5 text-pink-300" /> Give back <Sparkles className="w-3 h-3 text-yellow-300" /></span>
+            <h1 className="mt-3 text-4xl sm:text-5xl font-semibold tracking-tight text-white">Every gift <span className="bg-gradient-to-r from-violet-300 to-blue-300 bg-clip-text text-transparent">ripples</span></h1>
+            <p className="mx-auto mt-3 max-w-2xl text-sm text-white/70">Progress rings fill, counters tick, and confetti celebrates each milestone.</p>
+            <div className="mt-6 flex justify-center gap-2">
+              <Button asChild size="lg" className="rounded-full bg-white text-zinc-900 hover:bg-zinc-100 gap-2"><Link href="/donations/donate"><DollarSign className="w-4 h-4" /> Donate now</Link></Button>
+              <Button asChild size="lg" variant="outline" className="rounded-full border-white/20 bg-white/5 text-white hover:bg-white hover:text-zinc-900"><Link href="/donations/create"><Plus className="w-4 h-4 mr-1" /> Start campaign</Link></Button>
+            </div>
+          </Reveal>
+        </div>
+      </section>
 
-        {/* Current Campaigns */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">Current Campaigns</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {causes.map((cause, index) => (
-              <Card key={index} className="hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1">
-                <CardHeader>
-                  <CardTitle className="flex items-center text-xl font-semibold text-gray-800 dark:text-white">
-                    <Heart className="h-6 w-6 text-red-500 mr-3" />
-                    {cause.title}
-                  </CardTitle>
-                  <CardDescription className="text-gray-500 dark:text-gray-400 mt-2">{cause.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div>
-                      <div className="flex justify-between text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
-                        <span>Raised: <span className="font-bold">${cause.raised.toLocaleString()}</span></span>
-                        <span>Goal: <span className="font-bold">${cause.goal.toLocaleString()}</span></span>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <Reveal className="text-center mb-6">
+          <h2 className="text-2xl font-semibold tracking-tight">Current campaigns</h2>
+          <p className="text-sm text-zinc-600">Rings animate on scroll — hover to see confetti.</p>
+        </Reveal>
+
+        <Stagger className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {causes.map((c) => {
+            const pct = Math.round((c.raised / c.goal)*100);
+            const circ = 2 * Math.PI * 54;
+            const offset = circ - (pct/100)*circ;
+            return (
+              <StaggerItem key={c.title}>
+                <Card className="rounded-[20px] overflow-hidden hover:shadow-lg transition-shadow group">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-base"><Heart className="w-5 h-5 text-pink-600" />{c.title}</CardTitle>
+                    <CardDescription className="text-sm">{c.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center gap-6">
+                      <div className="relative w-28 h-28 shrink-0">
+                        <svg className="w-28 h-28 -rotate-90" viewBox="0 0 120 120">
+                          <circle cx="60" cy="60" r="54" stroke="#e5e7eb" strokeWidth="10" fill="none" />
+                          <motion.circle initial={{ strokeDashoffset: circ }} whileInView={{ strokeDashoffset: offset }} viewport={{ once: true }} transition={{ duration: 1.2, ease: "easeOut" }} cx="60" cy="60" r="54" stroke="url(#grad)" strokeWidth="10" fill="none" strokeLinecap="round" strokeDasharray={circ} />
+                          <defs><linearGradient id="grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#7c3aed" /><stop offset="100%" stopColor="#2563eb" /></linearGradient></defs>
+                        </svg>
+                        <div className="absolute inset-0 grid place-items-center">
+                          <div className="text-center"><div className="text-xl font-semibold">{pct}%</div><div className="text-[10px] tracking-wide uppercase text-zinc-500">of goal</div></div>
+                        </div>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700">
-                        <div 
-                          className="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full" 
-                          style={{ width: `${(cause.raised / cause.goal) * 100}%` }}
-                        ></div>
-                      </div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400 mt-2 text-right">
-                        <span className="font-semibold">{Math.round((cause.raised / cause.goal) * 100)}%</span> of goal reached
+                      <div className="flex-1">
+                        <div className="flex justify-between text-sm"><span className="text-zinc-600">Raised</span><span className="font-semibold">${c.raised.toLocaleString()}</span></div>
+                        <div className="flex justify-between text-sm"><span className="text-zinc-600">Goal</span><span className="font-semibold">${c.goal.toLocaleString()}</span></div>
+                        <div className="mt-2 h-2 rounded-full bg-zinc-100 overflow-hidden">
+                          <motion.div initial={{ width: 0 }} whileInView={{ width: `${pct}%` }} viewport={{ once: true }} transition={{ duration: 1 }} className={`h-full bg-gradient-to-r ${c.color}`} />
+                        </div>
+                        <div className="mt-1 text-xs text-zinc-500 flex items-center gap-1"><TrendingUp className="w-3 h-3" /> <AnimatedCounter value={`${pct}%`} /> funded</div>
                       </div>
                     </div>
-                    <Button className="w-full text-lg py-6" asChild>
-                      <Link href={`/donations/donate?cause=${encodeURIComponent(cause.title)}`}>
-                        Donate Now
-                      </Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+                    <Button asChild className="w-full mt-4 rounded-full"><Link href={`/donations/donate?cause=${encodeURIComponent(c.title)}`}>Donate now</Link></Button>
+                  </CardContent>
+                </Card>
+              </StaggerItem>
+            );
+          })}
+        </Stagger>
+
+        <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mt-10 rounded-2xl bg-gradient-to-r from-violet-600 to-blue-600 p-6 text-white flex flex-wrap items-center justify-between gap-4">
+          <div><div className="font-semibold">Quick donate</div><div className="text-sm text-white/80">Pick an amount — buttons pop with spring.</div></div>
+          <div className="flex flex-wrap gap-2">
+            {[25,50,100,250,500].map((a,i) => (
+              <motion.div key={a} initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true }} transition={{ delay: i*0.05, type: "spring" }}>
+                <Button asChild variant="secondary" size="sm" className="rounded-full bg-white text-zinc-900 hover:bg-zinc-100"><Link href={`/donations/donate?amount=${a}`}>${a}</Link></Button>
+              </motion.div>
             ))}
+            <Button asChild variant="outline" size="sm" className="rounded-full border-white text-white hover:bg-white hover:text-zinc-900"><Link href="/donations/donate">Custom</Link></Button>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Quick Donate */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-700 text-white rounded-xl p-10 mb-16 shadow-lg">
-          <div className="text-center">
-            <h2 className="text-4xl font-bold mb-4">Make a General Donation</h2>
-            <p className="text-xl mb-8 opacity-90">
-              Support our institution's overall mission and impact with a quick contribution.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              {[25, 50, 100, 250, 500].map((amount) => (
-                <Button key={amount} variant="secondary" size="lg" className="text-lg px-6 py-3" asChild>
-                  <Link href={`/donations/donate?amount=${amount}`}>
-                    ${amount}
-                  </Link>
-                </Button>
-              ))}
-              <Button variant="outline" size="lg" className="text-lg px-6 py-3 bg-white text-blue-700 hover:bg-gray-100" asChild>
-                <Link href="/donations/donate">Custom Amount</Link>
-              </Button>
-            </div>
+        <div className="mt-10">
+          <h2 className="text-xl font-semibold tracking-tight mb-4">Recent donations</h2>
+          <div className="rounded-2xl border bg-white p-4 sm:p-6 shadow-sm">
+            <DonationsList />
           </div>
-        </div>
-
-        {/* Recent Donations */}
-        <div>
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">Recent Donations</h2>
-          <DonationsList />
         </div>
       </div>
     </div>
